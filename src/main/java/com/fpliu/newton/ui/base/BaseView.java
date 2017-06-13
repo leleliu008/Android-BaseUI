@@ -198,10 +198,8 @@ public class BaseView extends CoordinatorLayout {
     }
 
     public final BaseView setTitle(int titleId) {
-        String title = "";
         try {
-            title = getContext().getString(titleId);
-            setTitle(title);
+            setTitle(getContext().getString(titleId));
         } catch (Exception e) {
             Logger.e(TAG, "setTitle()", e);
         }
