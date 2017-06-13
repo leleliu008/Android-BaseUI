@@ -69,8 +69,6 @@ dependencies {
 
     compile 'com.fpliu:Android-Logger:1.0.0'
     compile 'com.fpliu:Android-CustomToast:1.0.0'
-    compile 'com.fpliu:Android-CustomDimen:1.0.0'
-    compile 'com.fpliu:Android-EffectTextView:1.0.0'
 }
 
 
