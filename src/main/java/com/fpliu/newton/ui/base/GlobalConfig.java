@@ -17,6 +17,8 @@ public final class GlobalConfig {
 
     private static int titlePaddingLeftRight = 60;
 
+    private static String fontFileName;
+
     /**
      * 设置背景颜色
      *
@@ -67,5 +69,18 @@ public final class GlobalConfig {
 
     public static int getTitlePaddingLeftRight() {
         return titlePaddingLeftRight;
+    }
+
+    /**
+     * 设置字体
+     *
+     * @param fontFileName 字体文件存放在assets目录中
+     */
+    public static void setFontFileName(String fontFileName) {
+        GlobalConfig.fontFileName = fontFileName;
+    }
+
+    public static String getFontFileName() {
+        return GlobalConfig.fontFileName;
     }
 }

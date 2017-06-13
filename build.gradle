@@ -37,7 +37,7 @@ android {
             jni.srcDirs = [] //disable automatic ndk-build call
         }
     }
-    
+
     buildTypes {
         release {
             minifyEnabled false
@@ -47,7 +47,7 @@ android {
     lintOptions {
         abortOnError false
     }
-	compileOptions {//使用JAVA8语法解析
+    compileOptions {//使用JAVA8语法解析
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -67,8 +67,10 @@ dependencies {
     // If you want pre-written Activities and Fragments you can subclass as providers
     compile 'com.trello.rxlifecycle2:rxlifecycle-components:2.0.1'
 
-    compile 'com.fpliu:Android-CustomToast:1.0.0'
     compile 'com.fpliu:Android-Logger:1.0.0'
+    compile 'com.fpliu:Android-CustomToast:1.0.0'
+    compile 'com.fpliu:Android-CustomDimen:1.0.0'
+    compile 'com.fpliu:Android-EffectTextView:1.0.0'
 }
 
 
