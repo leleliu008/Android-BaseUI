@@ -12,7 +12,7 @@ import android.widget.RelativeLayout;
 public class ImageBtn implements IHeadViewStrategy<ImageButton> {
 
     @Override
-    public ImageButton getView(RelativeLayout headView) {
+    public ImageButton onCreateView(RelativeLayout headView) {
         Context context = headView.getContext();
         ImageButton imageButton = new ImageButton(context);
         imageButton.setImageResource(R.drawable.ic_back_white);

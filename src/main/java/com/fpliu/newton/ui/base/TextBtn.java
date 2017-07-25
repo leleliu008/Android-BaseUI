@@ -14,7 +14,7 @@ import android.widget.RelativeLayout;
 public class TextBtn implements IHeadViewStrategy<Button> {
 
     @Override
-    public Button getView(RelativeLayout headView) {
+    public Button onCreateView(RelativeLayout headView) {
         Context context = headView.getContext();
         Button btn = new Button(context);
         btn.setText("提交");

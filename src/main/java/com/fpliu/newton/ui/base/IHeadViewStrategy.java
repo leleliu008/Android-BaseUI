@@ -10,5 +10,5 @@ import android.widget.RelativeLayout;
  */
 public interface IHeadViewStrategy<V extends View> {
 
-    V getView(RelativeLayout parentView);
+    V onCreateView(RelativeLayout parentView);
 }

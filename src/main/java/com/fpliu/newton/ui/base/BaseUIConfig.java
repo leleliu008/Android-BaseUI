@@ -1,13 +1,17 @@
 package com.fpliu.newton.ui.base;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.view.Gravity;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 
 /**
  * 全局配置
  *
  * @author 792793182@qq.com 2017-06-11.
  */
-public final class GlobalConfig {
+public final class BaseUIConfig {
 
     private static int bgColor = Color.parseColor("#F2F2F2");
 
@@ -19,13 +23,31 @@ public final class GlobalConfig {
 
     private static String fontFileName;
 
+    private static IHeadViewStrategy<?> leftBtn = new TextBtn() {
+
+        @Override
+        public Button onCreateView(RelativeLayout headView) {
+            Context context = headView.getContext();
+            Button btn = super.onCreateView(headView);
+            btn.setText("返回");
+            btn.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+            btn.setTextColor(Color.WHITE);
+            btn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.btn_back_normal, 0, 0, 0);
+            btn.setCompoundDrawablePadding(5);
+            int padding = UIUtil.dip2px(context, 10);
+            btn.setPadding(padding, 0, padding, 0);
+            btn.setLayoutParams(new RelativeLayout.LayoutParams(UIUtil.dip2px(context, 90), RelativeLayout.LayoutParams.WRAP_CONTENT));
+            return btn;
+        }
+    };
+
     /**
      * 设置背景颜色
      *
      * @param bgColor 背景颜色
      */
     public static void setBgColor(int bgColor) {
-        GlobalConfig.bgColor = bgColor;
+        BaseUIConfig.bgColor = bgColor;
     }
 
     public static int getBgColor() {
@@ -38,7 +60,7 @@ public final class GlobalConfig {
      * @param headBgColor 标题栏的背景颜色
      */
     public static void setHeadBgColor(int headBgColor) {
-        GlobalConfig.headBgColor = headBgColor;
+        BaseUIConfig.headBgColor = headBgColor;
     }
 
     public static int getHeadBgColor() {
@@ -51,7 +73,7 @@ public final class GlobalConfig {
      * @param headHeight 标题栏的高度，单位：px
      */
     public static void setHeadHeight(int headHeight) {
-        GlobalConfig.headHeight = headHeight;
+        BaseUIConfig.headHeight = headHeight;
     }
 
     public static int getHeadHeight() {
@@ -64,7 +86,7 @@ public final class GlobalConfig {
      * @param titlePaddingLeftRight 标题栏两边的边距，单位：px
      */
     public static void setTitlePaddingLeftRight(int titlePaddingLeftRight) {
-        GlobalConfig.titlePaddingLeftRight = titlePaddingLeftRight;
+        BaseUIConfig.titlePaddingLeftRight = titlePaddingLeftRight;
     }
 
     public static int getTitlePaddingLeftRight() {
@@ -77,10 +99,18 @@ public final class GlobalConfig {
      * @param fontFileName 字体文件存放在assets目录中
      */
     public static void setFontFileName(String fontFileName) {
-        GlobalConfig.fontFileName = fontFileName;
+        BaseUIConfig.fontFileName = fontFileName;
     }
 
     public static String getFontFileName() {
-        return GlobalConfig.fontFileName;
+        return BaseUIConfig.fontFileName;
+    }
+
+    public static void setDefaultLeftBtn(IHeadViewStrategy<?> defaultLeftBtn) {
+        BaseUIConfig.leftBtn = defaultLeftBtn;
+    }
+
+    public static IHeadViewStrategy<?> getLeftBtn() {
+        return leftBtn;
     }
 }

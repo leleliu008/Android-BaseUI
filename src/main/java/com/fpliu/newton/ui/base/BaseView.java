@@ -77,15 +77,15 @@ public class BaseView extends CoordinatorLayout {
     }
 
     private void init(Context context) {
-        setBackgroundColor(GlobalConfig.getBgColor());
+        setBackgroundColor(BaseUIConfig.getBgColor());
 
         RelativeLayout container = new RelativeLayout(context);
         addView(container, new CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.MATCH_PARENT));
 
         headView = new RelativeLayout(context);
         headView.setId(R.id.base_view_head);
-        headView.setBackgroundColor(GlobalConfig.getHeadBgColor());
-        container.addView(headView, new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, GlobalConfig.getHeadHeight()));
+        headView.setBackgroundColor(BaseUIConfig.getHeadBgColor());
+        container.addView(headView, new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, BaseUIConfig.getHeadHeight()));
 
         titleTv = new TextView(context);
         titleTv.setTextColor(Color.WHITE);
@@ -226,9 +226,10 @@ public class BaseView extends CoordinatorLayout {
         if (headViewStrategy == null) {
             if (leftView != null && leftView.getParent() != null) {
                 headView.removeView(leftView);
+                leftView = null;
             }
         } else {
-            View view = headViewStrategy.getView(headView);
+            View view = headViewStrategy.onCreateView(headView);
             if (view != null && view.getParent() == null) {
                 if (leftView != null && leftView.getParent() != null) {
                     headView.removeView(leftView);
@@ -247,9 +248,10 @@ public class BaseView extends CoordinatorLayout {
         if (headViewStrategy == null) {
             if (rightView != null && rightView.getParent() != null) {
                 headView.removeView(rightView);
+                rightView = null;
             }
         } else {
-            View view = headViewStrategy.getView(headView);
+            View view = headViewStrategy.onCreateView(headView);
             if (view != null && view.getParent() == null) {
                 if (rightView != null && rightView.getParent() != null) {
                     headView.removeView(rightView);
@@ -265,7 +267,7 @@ public class BaseView extends CoordinatorLayout {
 
     public final BaseView addHeadViewStrategy(IHeadViewStrategy<?> headViewStrategy) {
         if (headViewStrategy != null) {
-            headViewStrategy.getView(headView);
+            headViewStrategy.onCreateView(headView);
         }
         return this;
     }
@@ -302,7 +304,7 @@ public class BaseView extends CoordinatorLayout {
             // do nothing
         }
 
-        snackbar.setActionTextColor(getResources().getColor(GlobalConfig.getHeadBgColor()));
+        snackbar.setActionTextColor(getResources().getColor(BaseUIConfig.getHeadBgColor()));
         snackbar.setAction("确定", v -> snackbar.dismiss());
         snackbar.show();
         return snackbar;
