@@ -106,7 +106,7 @@ public final class BaseUIConfig {
         return BaseUIConfig.fontFileName;
     }
 
-    public static void setDefaultLeftBtn(IHeadViewStrategy<?> defaultLeftBtn) {
+    public static void setLeftBtn(IHeadViewStrategy<?> defaultLeftBtn) {
         BaseUIConfig.leftBtn = defaultLeftBtn;
     }
 
