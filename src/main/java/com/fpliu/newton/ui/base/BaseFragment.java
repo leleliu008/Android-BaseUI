@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -12,12 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.Button;
-import android.widget.RelativeLayout;
 
 import com.fpliu.newton.log.Logger;
 import com.fpliu.newton.ui.toast.CustomToast;
-import com.jakewharton.rxbinding2.view.RxView;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 
 /**
@@ -44,23 +40,11 @@ public abstract class BaseFragment extends RxFragment {
     @Override
     public BaseView onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         contentView = new BaseView(getActivity());
-        contentView.setLeftViewStrategy(new TextBtn() {
-            @Override
-            public Button getView(RelativeLayout headView) {
-                Context context = headView.getContext();
-                Button btn = super.getView(headView);
-                btn.setText("返回");
-                btn.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
-                btn.setTextColor(Color.WHITE);
-                btn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.btn_back_normal, 0, 0, 0);
-                btn.setCompoundDrawablePadding(5);
-                int padding = UIUtil.dip2px(context, 10);
-                btn.setPadding(padding, 0, padding, 0);
-                btn.setLayoutParams(new RelativeLayout.LayoutParams(UIUtil.dip2px(context, 90), RelativeLayout.LayoutParams.WRAP_CONTENT));
-                RxView.clicks(btn).compose(bindToLifecycle()).subscribe(o -> onLeftBtnClick());
-                return btn;
-            }
-        });
+        contentView.setId(R.id.base_view);
+        contentView.setLeftViewStrategy(BaseUIConfig.getLeftBtn())
+                .getLeftBtnClickObservable()
+                .compose(bindToLifecycle())
+                .subscribe(o -> onLeftBtnClick());
         return contentView;
     }
 
