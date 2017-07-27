@@ -64,11 +64,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseVi
      */
     @Override
     public void onNetworkChange(boolean isNetworkAvailable) {
-        if (isNetworkAvailable) {
-            showToast("网络已连接");
-        } else {
-            showToast("网络未连接");
-        }
+
     }
 
     public BaseView getContentView() {
