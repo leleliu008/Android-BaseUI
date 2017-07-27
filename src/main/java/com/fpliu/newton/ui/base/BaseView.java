@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -58,8 +57,6 @@ public class BaseView extends CoordinatorLayout {
     private RelativeLayout bodyView;
 
     private NetworkChangeListener networkChangeListener;
-
-    private boolean isNetworkAvailable = true;
 
     public BaseView(Context context) {
         super(context);
@@ -294,63 +291,14 @@ public class BaseView extends CoordinatorLayout {
         receiver = null;
     }
 
-    public Snackbar showSnackBar(String message, int duration) {
-        final Snackbar snackbar = Snackbar.make(this, message, duration);
-
-        //防止崩溃掉
-        try {
-            ((TextView) snackbar.getView().findViewById(R.id.snackbar_text)).setTextColor(Color.WHITE);
-        } catch (Exception e) {
-            // do nothing
-        }
-
-        snackbar.setActionTextColor(getResources().getColor(BaseUIConfig.getHeadBgColor()));
-        snackbar.setAction("确定", v -> snackbar.dismiss());
-        snackbar.show();
-        return snackbar;
-    }
-
-    public final Snackbar showSnackBarWithAction(String message, int duration, String actionText, View.OnClickListener onClickListener) {
-        final Snackbar snackbar = Snackbar.make(this, message, duration);
-
-        //防止崩溃掉
-        try {
-            ((TextView) snackbar.getView().findViewById(R.id.snackbar_text)).setTextColor(Color.WHITE);
-        } catch (Exception e) {
-            // do nothing
-        }
-
-        snackbar.setAction(actionText, onClickListener);
-        snackbar.show();
-        return snackbar;
-    }
-
     private BroadcastReceiver receiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(final Context context, Intent intent) {
             if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
-                boolean needContinue = true;
-                boolean isNetworkAvailable = UIUtil.isNetworkAvailable(context);
                 if (networkChangeListener != null) {
-                    needContinue = networkChangeListener.onNetworkChange(isNetworkAvailable);
+                    networkChangeListener.onNetworkChange(UIUtil.isNetworkAvailable(context));
                 }
-
-                if (needContinue) {
-                    if (!BaseView.this.isNetworkAvailable) {
-                        if (isNetworkAvailable) {
-                            showSnackBar("网络已连接", Snackbar.LENGTH_LONG);
-                        } else {
-                            showSnackBarWithAction("网络未连接", Snackbar.LENGTH_INDEFINITE, "设置", v -> UIUtil.startNetSettingActivity(context));
-                        }
-                    } else {
-                        if (!isNetworkAvailable) {
-                            showSnackBarWithAction("网络未连接", Snackbar.LENGTH_INDEFINITE, "设置", v -> UIUtil.startNetSettingActivity(context));
-                        }
-                    }
-                }
-
-                BaseView.this.isNetworkAvailable = isNetworkAvailable;
             }
         }
     };
@@ -361,7 +309,7 @@ public class BaseView extends CoordinatorLayout {
          *
          * @param isNetworkAvailable 网络是否可用
          */
-        boolean onNetworkChange(boolean isNetworkAvailable);
+        void onNetworkChange(boolean isNetworkAvailable);
     }
 
     public void setNetworkChangeListener(NetworkChangeListener networkChangeListener) {

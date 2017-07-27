@@ -18,7 +18,7 @@ import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
  *
  * @author 792793182@qq.com 2015-06-11
  */
-public abstract class BaseActivity extends RxAppCompatActivity {
+public abstract class BaseActivity extends RxAppCompatActivity implements BaseView.NetworkChangeListener {
 
     private BaseView contentView;
 
@@ -39,12 +39,42 @@ public abstract class BaseActivity extends RxAppCompatActivity {
 
         contentView = new BaseView(this);
         contentView.setId(R.id.base_view);
+        contentView.setNetworkChangeListener(this);
         contentView.setLeftViewStrategy(BaseUIConfig.getLeftBtn())
                 .getLeftBtnClickObservable()
                 .compose(bindToLifecycle())
                 .subscribe(o -> onLeftBtnClick());
         setContentView(contentView);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        contentView = null;
+    }
+
+    public void onLeftBtnClick() {
+        finish();
+    }
+
+    /**
+     * 网络变化的回调
+     *
+     * @param isNetworkAvailable 网络是否可用
+     */
+    @Override
+    public void onNetworkChange(boolean isNetworkAvailable) {
+        if (isNetworkAvailable) {
+            showToast("网络已连接");
+        } else {
+            showToast("网络未连接");
+        }
+    }
+
+    public BaseView getContentView() {
+        return contentView;
+    }
+
 
     @Override
     public final void setContentView(int layoutResID) {
@@ -77,13 +107,6 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        contentView = null;
-    }
-
-    @Override
     public final void setTitle(CharSequence title) {
         if (contentView != null) {
             contentView.setTitle(title);
@@ -97,21 +120,24 @@ public abstract class BaseActivity extends RxAppCompatActivity {
         }
     }
 
-    public void onLeftBtnClick() {
-        finish();
-    }
-
-
-    public BaseView getContentView() {
-        return contentView;
+    public final void setTitleTextSize(float size) {
+        if (contentView != null) {
+            contentView.setTitleTextSize(size);
+        }
     }
 
     public void showToast(int resId) {
-        showToast(getResources().getString(resId));
+        try {
+            showToast(getResources().getString(resId));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void showToast(String text) {
-        CustomToast.makeText(getApplicationContext(), text, CustomToast.LENGTH_LONG).show(Gravity.CENTER, 0, 0);
+        if (!isFinishing()) {
+            CustomToast.makeText(getApplicationContext(), text, CustomToast.LENGTH_LONG).show(Gravity.CENTER, 0, 0);
+        }
     }
 
     protected final BaseActivity me() {

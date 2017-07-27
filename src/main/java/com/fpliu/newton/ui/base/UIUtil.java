@@ -10,12 +10,14 @@ import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.provider.Settings;
+import android.support.design.widget.Snackbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -563,5 +565,36 @@ public final class UIUtil {
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetInfo != null && activeNetInfo.isConnected();
+    }
+
+    public static Snackbar showSnackBar(View view, String message, int duration) {
+        final Snackbar snackbar = Snackbar.make(view, message, duration);
+
+        //防止崩溃掉
+        try {
+            ((TextView) snackbar.getView().findViewById(R.id.snackbar_text)).setTextColor(Color.WHITE);
+        } catch (Exception e) {
+            // do nothing
+        }
+
+        snackbar.setActionTextColor(BaseUIConfig.getHeadBgColor());
+        snackbar.setAction("确定", v -> snackbar.dismiss());
+        snackbar.show();
+        return snackbar;
+    }
+
+    public final Snackbar showSnackBarWithAction(View view, String message, int duration, String actionText, View.OnClickListener onClickListener) {
+        final Snackbar snackbar = Snackbar.make(view, message, duration);
+
+        //防止崩溃掉
+        try {
+            ((TextView) snackbar.getView().findViewById(R.id.snackbar_text)).setTextColor(Color.WHITE);
+        } catch (Exception e) {
+            // do nothing
+        }
+
+        snackbar.setAction(actionText, onClickListener);
+        snackbar.show();
+        return snackbar;
     }
 }

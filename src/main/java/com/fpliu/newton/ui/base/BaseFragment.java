@@ -1,10 +1,6 @@
 package com.fpliu.newton.ui.base;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -12,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 
-import com.fpliu.newton.log.Logger;
 import com.fpliu.newton.ui.toast.CustomToast;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 
@@ -21,30 +16,47 @@ import com.trello.rxlifecycle2.components.support.RxFragment;
  *
  * @author 792793182@qq.com 2015-06-11
  */
-public abstract class BaseFragment extends RxFragment {
-
-    private static final String TAG = BaseFragment.class.getSimpleName();
+public abstract class BaseFragment extends RxFragment implements BaseView.NetworkChangeListener {
 
     private BaseView contentView;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        //注册网络变化的监听器
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        getActivity().registerReceiver(receiver, intentFilter);
-    }
 
     @Override
     public BaseView onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         contentView = new BaseView(getActivity());
         contentView.setId(R.id.base_view);
+        contentView.setNetworkChangeListener(this);
         contentView.setLeftViewStrategy(BaseUIConfig.getLeftBtn())
                 .getLeftBtnClickObservable()
                 .compose(bindToLifecycle())
                 .subscribe(o -> onLeftBtnClick());
+        return contentView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        contentView = null;
+    }
+
+    public void onLeftBtnClick() {
+        getActivity().onBackPressed();
+    }
+
+    /**
+     * 网络变化的回调
+     *
+     * @param isNetworkAvailable 网络是否可用
+     */
+    @Override
+    public void onNetworkChange(boolean isNetworkAvailable) {
+        if (isNetworkAvailable) {
+            showToast("网络已连接");
+        } else {
+            showToast("网络未连接");
+        }
+    }
+
+    public final BaseView getContentView() {
         return contentView;
     }
 
@@ -89,19 +101,6 @@ public abstract class BaseFragment extends RxFragment {
         contentView.setHeadView(view);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-        try {
-            getActivity().unregisterReceiver(receiver);
-        } catch (Exception e) {
-            Logger.e(TAG, "onDestroy()", e);
-        }
-
-        contentView = null;
-    }
-
     public final void setTitle(CharSequence title) {
         if (contentView != null) {
             contentView.setTitle(title);
@@ -120,34 +119,18 @@ public abstract class BaseFragment extends RxFragment {
         }
     }
 
-    public void onLeftBtnClick() {
-        getActivity().onBackPressed();
-    }
-
-    public BaseView getContentView() {
-        return contentView;
-    }
-
-    /**
-     * 网络变化的回调
-     *
-     * @param isNetworkAvailable 网络是否可用
-     */
-    protected void onNetworkChange(boolean isNetworkAvailable) {
-
-    }
-
     public void showToast(String text) {
-        CustomToast.makeText(getContext(), text, CustomToast.LENGTH_LONG).show(Gravity.CENTER, 0, 0);
+        Activity activity = getActivity();
+        if (activity != null && !activity.isFinishing()) {
+            CustomToast.makeText(activity, text, CustomToast.LENGTH_LONG).show(Gravity.CENTER, 0, 0);
+        }
     }
 
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
-                onNetworkChange(UIUtil.isNetworkAvailable(context));
-            }
+    public void showToast(int resId) {
+        try {
+            showToast(getResources().getString(resId));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    };
+    }
 }
