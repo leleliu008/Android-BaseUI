@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.text.TextUtils;
@@ -174,6 +175,27 @@ public class BaseView extends CoordinatorLayout {
         headView.removeAllViews();
         LayoutParams lp1 = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         headView.addView(LayoutInflater.from(getContext()).inflate(layoutId, headView, false), lp1);
+        return this;
+    }
+
+    public final BaseView setHeadBackgroundColor(int color) {
+        if (headView != null) {
+            headView.setBackgroundColor(color);
+        }
+        return this;
+    }
+
+    public final BaseView setHeadBackgroundResource(int resId) {
+        if (headView != null) {
+            headView.setBackgroundResource(resId);
+        }
+        return this;
+    }
+
+    public final BaseView setHeadBackgroundDrawable(Drawable drawable) {
+        if (headView != null) {
+            headView.setBackgroundDrawable(drawable);
+        }
         return this;
     }
 
