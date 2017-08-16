@@ -34,8 +34,12 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseVi
         //设置背景颜色
         window.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
 
-        //去掉默认是标题，自己定义标题栏
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        try {
+            //去掉默认是标题，自己定义标题栏
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         contentView = new BaseView(this);
         contentView.setId(R.id.base_view);
