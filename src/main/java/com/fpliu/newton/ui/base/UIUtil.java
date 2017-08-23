@@ -13,6 +13,8 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RoundRectShape;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -21,6 +23,7 @@ import android.support.design.widget.Snackbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -32,6 +35,7 @@ import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -596,5 +600,41 @@ public final class UIUtil {
         snackbar.setAction(actionText, onClickListener);
         snackbar.show();
         return snackbar;
+    }
+
+    /**
+     * @param context  上下文
+     * @param text     要显示的文本
+     * @param duration 显示时长，单位：毫秒
+     */
+    public static Toast makeToast(Context context, CharSequence text, int duration) {
+        Toast toast = new Toast(context);
+        toast.setDuration(duration);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+
+        TextView textView = new TextView(context);
+        int width = dip2px(context, 20);
+        int height = dip2px(context, 20);
+        textView.setPadding(width, height, width, height);
+        textView.setBackgroundDrawable(getRoundRectShapeDrawable(Color.parseColor("#BA000000")));
+        textView.setText(text);
+        textView.setTextColor(Color.WHITE);
+        textView.setTextSize(16);
+        toast.setView(textView);
+
+        return toast;
+    }
+
+    public static Toast makeToast(Context context, int stringId, int duration) {
+        return makeToast(context, context.getResources().getText(stringId), duration);
+    }
+
+    public static ShapeDrawable getRoundRectShapeDrawable(int color) {
+        float r = 10;
+        float[] outerR = new float[]{r, r, r, r, r, r, r, r};
+        RoundRectShape rr = new RoundRectShape(outerR, null, null);
+        ShapeDrawable drawable = new ShapeDrawable(rr);
+        drawable.getPaint().setColor(color);
+        return drawable;
     }
 }

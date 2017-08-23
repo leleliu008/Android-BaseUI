@@ -2,13 +2,13 @@ package com.fpliu.newton.ui.base;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.Toast;
 
-import com.fpliu.newton.ui.toast.CustomToast;
+import com.fpliu.newton.log.Logger;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 
 /**
@@ -118,7 +118,7 @@ public abstract class BaseFragment extends RxFragment implements BaseView.Networ
     public void showToast(String text) {
         Activity activity = getActivity();
         if (activity != null && !activity.isFinishing()) {
-            CustomToast.makeText(activity, text, CustomToast.LENGTH_LONG).show(Gravity.CENTER, 0, 0);
+            Toast.makeText(activity, text, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -126,7 +126,7 @@ public abstract class BaseFragment extends RxFragment implements BaseView.Networ
         try {
             showToast(getResources().getString(resId));
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.e(BaseFragment.class.getSimpleName(), "showToast()", e);
         }
     }
 }

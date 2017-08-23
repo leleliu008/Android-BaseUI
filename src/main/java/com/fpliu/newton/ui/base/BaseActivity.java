@@ -4,13 +4,12 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
-import com.fpliu.newton.ui.toast.CustomToast;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 /**
@@ -136,7 +135,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseVi
 
     public void showToast(String text) {
         if (!isFinishing()) {
-            CustomToast.makeText(getApplicationContext(), text, CustomToast.LENGTH_LONG).show(Gravity.CENTER, 0, 0);
+            UIUtil.makeToast(getApplicationContext(), text, Toast.LENGTH_LONG).show();
         }
     }
 

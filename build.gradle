@@ -68,7 +68,6 @@ dependencies {
     compile 'com.trello.rxlifecycle2:rxlifecycle-components:2.0.1'
 
     compile 'com.fpliu:Android-Logger:1.0.0'
-    compile 'com.fpliu:Android-CustomToast:1.0.0'
 }
 
 
