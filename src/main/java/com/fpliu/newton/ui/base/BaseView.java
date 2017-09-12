@@ -83,6 +83,7 @@ public class BaseView extends CoordinatorLayout {
         headView = new RelativeLayout(context);
         headView.setId(R.id.base_view_head);
         headView.setBackgroundColor(BaseUIConfig.getHeadBgColor());
+        headView.setVisibility(GONE);
         container.addView(headView, new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, BaseUIConfig.getHeadHeight()));
 
         titleTv = new TextView(context);
@@ -200,19 +201,20 @@ public class BaseView extends CoordinatorLayout {
     }
 
     public final BaseView setTitle(CharSequence title) {
-        if (titleTv == null) {
-            titleTv = new TextView(getContext());
-            titleTv.setTextColor(Color.WHITE);
-            titleTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-            titleTv.setMaxLines(1);
-            titleTv.setEllipsize(TextUtils.TruncateAt.END);
-            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            lp.leftMargin = UIUtil.dip2px(getContext(), 60);
-            lp.rightMargin = UIUtil.dip2px(getContext(), 60);
-            lp.addRule(RelativeLayout.CENTER_IN_PARENT);
-            headView.addView(titleTv, lp);
-        }
+        titleTv = new TextView(getContext());
+        titleTv.setTextColor(Color.WHITE);
+        titleTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+        titleTv.setMaxLines(1);
+        titleTv.setEllipsize(TextUtils.TruncateAt.END);
         titleTv.setText(title);
+
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        lp.leftMargin = UIUtil.dip2px(getContext(), 60);
+        lp.rightMargin = UIUtil.dip2px(getContext(), 60);
+        lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+        headView.addView(titleTv, lp);
+        headView.setVisibility(VISIBLE);
+
         return this;
     }
 
@@ -226,9 +228,6 @@ public class BaseView extends CoordinatorLayout {
     }
 
     public final BaseView setTitleTextSize(float size) {
-        if (titleTv == null) {
-            setTitle("");
-        }
         titleTv.setTextSize(size);
         return this;
     }
