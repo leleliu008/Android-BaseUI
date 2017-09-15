@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
@@ -13,15 +14,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fpliu.newton.log.Logger;
-import com.jakewharton.rxbinding2.InitialValueObservable;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxCompoundButton;
 import com.jakewharton.rxbinding2.widget.RxTextView;
-import com.jakewharton.rxbinding2.widget.TextViewAfterTextChangeEvent;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
 
 /**
  * Activity界面基类
@@ -231,11 +231,76 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseVi
         }
     }
 
+    protected final void notEmptyThenEnabled(TextView textView, View view) {
+        afterTextChange(textView)
+                .map(text -> !TextUtils.isEmpty(text))
+                .subscribe(RxView.enabled(view));
+    }
+
+    protected final void notEmptyThenEnabled(int textViewId, int viewId) {
+        View view1 = findViewById(textViewId);
+        View view2 = findViewById(viewId);
+        if (view1 == null || view2 == null) {
+            return;
+        }
+        if (view1 instanceof TextView) {
+            afterTextChange((TextView) view1)
+                    .map(text -> !TextUtils.isEmpty(text))
+                    .subscribe(RxView.enabled(view2));
+        }
+    }
+
+    protected final void notEmptyThenEnabled(TextView textView, int viewId) {
+        View view = findViewById(viewId);
+        if (textView == null || view == null) {
+            return;
+        }
+        afterTextChange(textView)
+                .map(text -> !TextUtils.isEmpty(text))
+                .subscribe(RxView.enabled(view));
+    }
+
+    protected final void notEmptyThenEnabled(int textViewId, View view) {
+        View view1 = findViewById(textViewId);
+        if (view1 == null || view == null) {
+            return;
+        }
+        if (view1 instanceof TextView) {
+            afterTextChange((TextView) view1)
+                    .map(text -> !TextUtils.isEmpty(text))
+                    .subscribe(RxView.enabled(view));
+        }
+    }
+
     protected final Observable<String> afterTextChange(TextView textView) {
         return RxTextView.afterTextChangeEvents(textView).compose(bindUntilEvent(ActivityEvent.DESTROY)).map(event -> event.editable().toString());
     }
 
     protected final Observable<String> afterTextChange(int textViewId) {
         return RxTextView.afterTextChangeEvents((TextView) findViewById(textViewId)).compose(bindUntilEvent(ActivityEvent.DESTROY)).map(event -> event.editable().toString());
+    }
+
+    protected final Observable<Integer> editorActions(TextView textView) {
+        return RxTextView.editorActions(textView).compose(bindUntilEvent(ActivityEvent.DESTROY));
+    }
+
+    protected final Observable<Integer> editorActions(int textViewId) {
+        return RxTextView.editorActions((TextView) findViewById(textViewId)).compose(bindUntilEvent(ActivityEvent.DESTROY));
+    }
+
+    protected final Consumer<? super CharSequence> hint(TextView textView) {
+        return RxTextView.hint(textView);
+    }
+
+    protected final Consumer<? super CharSequence> hint(int textViewId) {
+        return RxTextView.hint((TextView) findViewById(textViewId));
+    }
+
+    protected final Consumer<? super Boolean> enabled(View view) {
+        return RxView.enabled(view);
+    }
+
+    protected final Consumer<? super Boolean> enabled(int viewId) {
+        return RxView.enabled(findViewById(viewId));
     }
 }
