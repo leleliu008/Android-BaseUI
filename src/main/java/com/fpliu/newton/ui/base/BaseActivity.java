@@ -13,8 +13,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fpliu.newton.log.Logger;
+import com.jakewharton.rxbinding2.InitialValueObservable;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxCompoundButton;
+import com.jakewharton.rxbinding2.widget.RxTextView;
+import com.jakewharton.rxbinding2.widget.TextViewAfterTextChangeEvent;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
@@ -226,5 +229,13 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseVi
                     .compose(bindUntilEvent(ActivityEvent.DESTROY))
                     .subscribe(RxView.enabled(view));
         }
+    }
+
+    protected final Observable<String> afterTextChange(TextView textView) {
+        return RxTextView.afterTextChangeEvents(textView).compose(bindUntilEvent(ActivityEvent.DESTROY)).map(event -> event.editable().toString());
+    }
+
+    protected final Observable<String> afterTextChange(int textViewId) {
+        return RxTextView.afterTextChangeEvents((TextView) findViewById(textViewId)).compose(bindUntilEvent(ActivityEvent.DESTROY)).map(event -> event.editable().toString());
     }
 }

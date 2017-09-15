@@ -14,6 +14,8 @@ import android.widget.Toast;
 import com.fpliu.newton.log.Logger;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxCompoundButton;
+import com.jakewharton.rxbinding2.widget.RxTextView;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 
@@ -218,5 +220,13 @@ public abstract class BaseFragment extends RxFragment implements BaseView.Networ
                     .compose(bindUntilEvent(FragmentEvent.DESTROY_VIEW))
                     .subscribe(RxView.enabled(view));
         }
+    }
+
+    protected final Observable<String> afterTextChange(TextView textView) {
+        return RxTextView.afterTextChangeEvents(textView).compose(bindUntilEvent(FragmentEvent.DESTROY_VIEW)).map(event -> event.editable().toString());
+    }
+
+    protected final Observable<String> afterTextChange(int textViewId) {
+        return RxTextView.afterTextChangeEvents((TextView) contentView.findViewById(textViewId)).compose(bindUntilEvent(FragmentEvent.DESTROY_VIEW)).map(event -> event.editable().toString());
     }
 }
