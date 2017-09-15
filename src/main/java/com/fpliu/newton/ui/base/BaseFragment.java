@@ -5,11 +5,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fpliu.newton.log.Logger;
+import com.trello.rxlifecycle2.android.FragmentEvent;
 import com.trello.rxlifecycle2.components.support.RxFragment;
+
+import io.reactivex.Observable;
 
 /**
  * Fragment界面基类
@@ -27,7 +31,7 @@ public abstract class BaseFragment extends RxFragment implements BaseView.Networ
         contentView.setNetworkChangeListener(this);
         contentView.setLeftViewStrategy(BaseUIConfig.getLeftBtn())
                 .getLeftBtnClickObservable()
-                .compose(bindToLifecycle())
+                .compose(bindUntilEvent(FragmentEvent.DESTROY_VIEW))
                 .subscribe(o -> onLeftBtnClick());
         return contentView;
     }
@@ -56,25 +60,25 @@ public abstract class BaseFragment extends RxFragment implements BaseView.Networ
         return contentView;
     }
 
-    public void addContentView(View view, LayoutParams params) {
+    public final void addViewInBody(View view, RelativeLayout.LayoutParams params) {
         if (contentView == null) {
             return;
         }
-        contentView.addContentView(view, params);
+        contentView.addViewInBody(view, params);
     }
 
-    public void addContentView(View view) {
+    public final void addViewInBody(View view) {
         if (contentView == null) {
             return;
         }
-        contentView.addContentView(view);
+        contentView.addViewInBody(view);
     }
 
-    public void addContentView(int layoutId) {
+    public final void addViewInBody(int layoutId) {
         if (contentView == null) {
             return;
         }
-        contentView.addContentView(layoutId);
+        contentView.addViewInBody(layoutId);
     }
 
     /**
@@ -115,18 +119,56 @@ public abstract class BaseFragment extends RxFragment implements BaseView.Networ
         }
     }
 
-    public void showToast(String text) {
+    public final void showToast(String text) {
         Activity activity = getActivity();
         if (activity != null && !activity.isFinishing()) {
             Toast.makeText(activity, text, Toast.LENGTH_LONG).show();
         }
     }
 
-    public void showToast(int resId) {
+    public final void showToast(int resId) {
         try {
             showToast(getResources().getString(resId));
         } catch (Exception e) {
             Logger.e(BaseFragment.class.getSimpleName(), "showToast()", e);
         }
+    }
+
+    protected final void text(int textViewId, String text) {
+        View view = contentView.findViewById(textViewId);
+        if (view != null) {
+            if (view instanceof TextView) {
+                ((TextView) view).setText(text);
+            }
+        }
+    }
+
+    protected final void text(TextView textView, String text) {
+        if (textView != null) {
+            textView.setText(text);
+        }
+    }
+
+    protected final void text(int textViewId, int stringId) {
+        View view = contentView.findViewById(textViewId);
+        if (view != null) {
+            if (view instanceof TextView) {
+                ((TextView) view).setText(getResources().getString(stringId));
+            }
+        }
+    }
+
+    protected final void text(TextView textView, int stringId) {
+        if (textView != null) {
+            textView.setText(getResources().getString(stringId));
+        }
+    }
+
+    protected final Observable<? extends View> click(int textViewId) {
+        return new ViewClickObservable(contentView.findViewById(textViewId)).compose(bindUntilEvent(FragmentEvent.DESTROY_VIEW));
+    }
+
+    protected final Observable<? extends View> click(View view) {
+        return new ViewClickObservable(view).compose(bindUntilEvent(FragmentEvent.DESTROY_VIEW));
     }
 }

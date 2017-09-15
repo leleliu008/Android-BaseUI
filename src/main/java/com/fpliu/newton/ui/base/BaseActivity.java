@@ -8,9 +8,14 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fpliu.newton.log.Logger;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+
+import io.reactivex.Observable;
 
 /**
  * Activity界面基类
@@ -45,7 +50,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseVi
         contentView.setNetworkChangeListener(this);
         contentView.setLeftViewStrategy(BaseUIConfig.getLeftBtn())
                 .getLeftBtnClickObservable()
-                .compose(bindToLifecycle())
+                .compose(bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(o -> onLeftBtnClick());
         setContentView(contentView);
     }
@@ -70,7 +75,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseVi
 
     }
 
-    public BaseView getContentView() {
+    public final BaseView getContentView() {
         return contentView;
     }
 
@@ -80,29 +85,24 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseVi
         setContentView(View.inflate(this, layoutResID, null));
     }
 
-    @Override
-    public void addContentView(View view, LayoutParams params) {
-        contentView.addContentView(view, params);
+    public final void addContentView(View view) {
+        addContentView(view, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
     }
 
-    public void addContentView(View view) {
-        contentView.addContentView(view);
+    public final void addContentView(int layoutId) {
+        addContentView(View.inflate(this, layoutId, null), new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
     }
 
-    public void addContentView(int layoutId) {
-        contentView.addContentView(layoutId);
+    public final void addViewInBody(View view, RelativeLayout.LayoutParams params) {
+        contentView.addViewInBody(view, params);
     }
 
-    public void appendViewInBody(View view, RelativeLayout.LayoutParams params) {
-        contentView.appendViewInBody(view, params);
+    public final void addViewInBody(View view) {
+        contentView.addViewInBody(view);
     }
 
-    public void appendViewInBody(View view) {
-        contentView.appendViewInBody(view);
-    }
-
-    public void appendViewInBody(int layoutId) {
-        contentView.appendViewInBody(layoutId);
+    public final void addViewInBody(int layoutId) {
+        contentView.addViewInBody(layoutId);
     }
 
     @Override
@@ -125,15 +125,15 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseVi
         }
     }
 
-    public void showToast(int resId) {
+    public final void showToast(int resId) {
         try {
             showToast(getResources().getString(resId));
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.e(getClass().getSimpleName(), "showToast()", e);
         }
     }
 
-    public void showToast(String text) {
+    public final void showToast(String text) {
         if (!isFinishing()) {
             UIUtil.makeToast(getApplicationContext(), text, Toast.LENGTH_LONG).show();
         }
@@ -141,5 +141,43 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseVi
 
     protected final BaseActivity me() {
         return this;
+    }
+
+    protected final void text(int textViewId, String text) {
+        View view = findViewById(textViewId);
+        if (view != null) {
+            if (view instanceof TextView) {
+                ((TextView) view).setText(text);
+            }
+        }
+    }
+
+    protected final void text(TextView textView, String text) {
+        if (textView != null) {
+            textView.setText(text);
+        }
+    }
+
+    protected final void text(int textViewId, int stringId) {
+        View view = findViewById(textViewId);
+        if (view != null) {
+            if (view instanceof TextView) {
+                ((TextView) view).setText(getResources().getString(stringId));
+            }
+        }
+    }
+
+    protected final void text(TextView textView, int stringId) {
+        if (textView != null) {
+            textView.setText(getResources().getString(stringId));
+        }
+    }
+
+    protected final Observable<? extends View> click(int textViewId) {
+        return new ViewClickObservable(findViewById(textViewId)).compose(bindUntilEvent(ActivityEvent.DESTROY));
+    }
+
+    protected final Observable<? extends View> click(View view) {
+        return new ViewClickObservable(view).compose(bindUntilEvent(ActivityEvent.DESTROY));
     }
 }

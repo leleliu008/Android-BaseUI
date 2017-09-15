@@ -102,32 +102,12 @@ public class BaseView extends CoordinatorLayout {
         container.addView(bodyView, lp);
     }
 
-    public BaseView addContentView(View view, ViewGroup.LayoutParams params) {
-        bodyView.addView(view, params);
+    public BaseView addViewInBody(View view, RelativeLayout.LayoutParams lp) {
+        bodyView.addView(view, lp);
         return this;
     }
 
-    public BaseView addContentView(View view) {
-        bodyView.addView(view, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-        return this;
-    }
-
-    /**
-     * 注意：这几个重载的方法不同互相调用，因为子类可能会重写，会出现不肯想象的结果
-     *
-     * @param layoutId 布局文件的ID
-     */
-    public BaseView addContentView(int layoutId) {
-        bodyView.addView(View.inflate(getContext(), layoutId, null), new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-        return this;
-    }
-
-    public BaseView appendViewInBody(View view, RelativeLayout.LayoutParams params) {
-        bodyView.addView(view, params);
-        return this;
-    }
-
-    public BaseView appendViewInBody(View view) {
+    public BaseView addViewInBody(View view) {
         bodyView.addView(view, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         return this;
     }
@@ -137,7 +117,7 @@ public class BaseView extends CoordinatorLayout {
      *
      * @param layoutId 布局文件的ID
      */
-    public BaseView appendViewInBody(int layoutId) {
+    public BaseView addViewInBody(int layoutId) {
         bodyView.addView(View.inflate(getContext(), layoutId, null), new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         return this;
     }
