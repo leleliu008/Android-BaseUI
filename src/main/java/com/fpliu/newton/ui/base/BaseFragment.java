@@ -5,11 +5,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fpliu.newton.log.Logger;
+import com.jakewharton.rxbinding2.view.RxView;
+import com.jakewharton.rxbinding2.widget.RxCompoundButton;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 
@@ -119,7 +123,7 @@ public abstract class BaseFragment extends RxFragment implements BaseView.Networ
         }
     }
 
-    public final void showToast(String text) {
+    public final void showToast(CharSequence text) {
         Activity activity = getActivity();
         if (activity != null && !activity.isFinishing()) {
             Toast.makeText(activity, text, Toast.LENGTH_LONG).show();
@@ -134,7 +138,7 @@ public abstract class BaseFragment extends RxFragment implements BaseView.Networ
         }
     }
 
-    protected final void text(int textViewId, String text) {
+    protected final void text(int textViewId, CharSequence text) {
         View view = contentView.findViewById(textViewId);
         if (view != null) {
             if (view instanceof TextView) {
@@ -143,7 +147,7 @@ public abstract class BaseFragment extends RxFragment implements BaseView.Networ
         }
     }
 
-    protected final void text(TextView textView, String text) {
+    protected final void text(TextView textView, CharSequence text) {
         if (textView != null) {
             textView.setText(text);
         }
@@ -170,5 +174,49 @@ public abstract class BaseFragment extends RxFragment implements BaseView.Networ
 
     protected final Observable<? extends View> click(View view) {
         return new ViewClickObservable(view).compose(bindUntilEvent(FragmentEvent.DESTROY_VIEW));
+    }
+
+    protected final void checkedThenEnabled(CompoundButton compoundButton, View view) {
+        if (compoundButton == null || view == null) {
+            return;
+        }
+        RxCompoundButton.checkedChanges(compoundButton)
+                .compose(bindUntilEvent(FragmentEvent.DESTROY_VIEW))
+                .subscribe(RxView.enabled(view));
+    }
+
+    protected final void checkedThenEnabled(int compoundButtonId, int viewId) {
+        View view1 = contentView.findViewById(compoundButtonId);
+        View view2 = contentView.findViewById(viewId);
+        if (view1 == null || view2 == null) {
+            return;
+        }
+        if (view1 instanceof CompoundButton) {
+            RxCompoundButton.checkedChanges((CompoundButton) view1)
+                    .compose(bindUntilEvent(FragmentEvent.DESTROY_VIEW))
+                    .subscribe(RxView.enabled(view2));
+        }
+    }
+
+    protected final void checkedThenEnabled(CompoundButton compoundButton, int viewId) {
+        View view = contentView.findViewById(viewId);
+        if (compoundButton == null || view == null) {
+            return;
+        }
+        RxCompoundButton.checkedChanges(compoundButton)
+                .compose(bindUntilEvent(FragmentEvent.DESTROY_VIEW))
+                .subscribe(RxView.enabled(view));
+    }
+
+    protected final void checkedThenEnabled(int compoundButtonId, View view) {
+        View view1 = contentView.findViewById(compoundButtonId);
+        if (view1 == null || view == null) {
+            return;
+        }
+        if (view1 instanceof CompoundButton) {
+            RxCompoundButton.checkedChanges((CompoundButton) view1)
+                    .compose(bindUntilEvent(FragmentEvent.DESTROY_VIEW))
+                    .subscribe(RxView.enabled(view));
+        }
     }
 }
