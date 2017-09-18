@@ -279,6 +279,22 @@ public abstract class BaseFragment extends RxFragment implements BaseView.Networ
         return RxTextView.editorActions((TextView) contentView.findViewById(textViewId)).compose(bindUntilEvent(FragmentEvent.DESTROY_VIEW));
     }
 
+    protected final Observable<Boolean> checkedChange(CompoundButton compoundButton) {
+        return RxCompoundButton.checkedChanges(compoundButton).compose(bindUntilEvent(FragmentEvent.DESTROY_VIEW));
+    }
+
+    protected final Observable<Boolean> checkedChange(int textViewId) {
+        return RxCompoundButton.checkedChanges((CompoundButton) contentView.findViewById(textViewId)).compose(bindUntilEvent(FragmentEvent.DESTROY_VIEW));
+    }
+
+    protected final Consumer<? super Boolean> checked(CompoundButton compoundButton) {
+        return RxCompoundButton.checked(compoundButton);
+    }
+
+    protected final Consumer<? super Boolean> checked(int compoundButtonId) {
+        return RxCompoundButton.checked((CompoundButton) contentView.findViewById(compoundButtonId));
+    }
+
     protected final Consumer<? super CharSequence> hint(TextView textView) {
         return RxTextView.hint(textView);
     }

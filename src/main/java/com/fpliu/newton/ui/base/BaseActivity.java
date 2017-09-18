@@ -288,6 +288,22 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseVi
         return RxTextView.editorActions((TextView) findViewById(textViewId)).compose(bindUntilEvent(ActivityEvent.DESTROY));
     }
 
+    protected final Observable<Boolean> checkedChange(CompoundButton compoundButton) {
+        return RxCompoundButton.checkedChanges(compoundButton).compose(bindUntilEvent(ActivityEvent.DESTROY));
+    }
+
+    protected final Observable<Boolean> checkedChange(int textViewId) {
+        return RxCompoundButton.checkedChanges((CompoundButton) findViewById(textViewId)).compose(bindUntilEvent(ActivityEvent.DESTROY));
+    }
+
+    protected final Consumer<? super Boolean> checked(CompoundButton compoundButton) {
+        return RxCompoundButton.checked(compoundButton);
+    }
+
+    protected final Consumer<? super Boolean> checked(int compoundButtonId) {
+        return RxCompoundButton.checked((CompoundButton) findViewById(compoundButtonId));
+    }
+
     protected final Consumer<? super CharSequence> hint(TextView textView) {
         return RxTextView.hint(textView);
     }
