@@ -20,6 +20,8 @@ import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
+import java.util.concurrent.TimeUnit;
+
 import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
 
@@ -180,11 +182,11 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseVi
     }
 
     protected final Observable<? extends View> click(int textViewId) {
-        return new ViewClickObservable(findViewById(textViewId)).compose(bindUntilEvent(ActivityEvent.DESTROY));
+        return new ViewClickObservable(findViewById(textViewId)).compose(bindUntilEvent(ActivityEvent.DESTROY)).throttleFirst(3, TimeUnit.SECONDS);
     }
 
     protected final Observable<? extends View> click(View view) {
-        return new ViewClickObservable(view).compose(bindUntilEvent(ActivityEvent.DESTROY));
+        return new ViewClickObservable(view).compose(bindUntilEvent(ActivityEvent.DESTROY)).throttleFirst(3, TimeUnit.SECONDS);
     }
 
     protected final void checkedThenEnabled(CompoundButton compoundButton, View view) {

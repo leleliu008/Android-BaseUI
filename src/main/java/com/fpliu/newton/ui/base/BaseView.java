@@ -19,7 +19,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fpliu.newton.log.Logger;
-import com.jakewharton.rxbinding2.view.RxView;
+
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 
@@ -212,12 +213,22 @@ public class BaseView extends CoordinatorLayout {
         return this;
     }
 
-    public Observable<Object> getLeftBtnClickObservable() {
-        return leftView == null ? Observable.empty() : RxView.clicks(leftView);
+    public final BaseView setTitleTextColor(int color) {
+        titleTv.setTextColor(color);
+        return this;
     }
 
-    public Observable<Object> getRightBtnClickObservable() {
-        return rightView == null ? Observable.empty() : RxView.clicks(rightView);
+    public final BaseView setTitleTextColorRes(int colorRes) {
+        titleTv.setTextColor(getResources().getColor(colorRes));
+        return this;
+    }
+
+    public Observable<View> getLeftBtnClickObservable() {
+        return leftView == null ? Observable.empty() : new ViewClickObservable(leftView).throttleFirst(3, TimeUnit.SECONDS);
+    }
+
+    public Observable<View> getRightBtnClickObservable() {
+        return rightView == null ? Observable.empty() : new ViewClickObservable(rightView).throttleFirst(3, TimeUnit.SECONDS);
     }
 
     public BaseView setLeftViewStrategy(IHeadViewStrategy<?> headViewStrategy) {
