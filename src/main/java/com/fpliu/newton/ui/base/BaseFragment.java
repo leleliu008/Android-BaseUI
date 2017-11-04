@@ -18,8 +18,6 @@ import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 
-import java.util.concurrent.TimeUnit;
-
 import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
 
@@ -173,11 +171,11 @@ public abstract class BaseFragment extends RxFragment implements BaseView.Networ
     }
 
     protected final Observable<? extends View> click(int textViewId) {
-        return new ViewClickObservable(contentView.findViewById(textViewId)).compose(bindUntilEvent(FragmentEvent.DESTROY_VIEW)).throttleFirst(3, TimeUnit.SECONDS);
+        return new ViewClickObservable(contentView.findViewById(textViewId)).compose(bindUntilEvent(FragmentEvent.DESTROY_VIEW));
     }
 
     protected final Observable<? extends View> click(View view) {
-        return new ViewClickObservable(view).compose(bindUntilEvent(FragmentEvent.DESTROY_VIEW)).throttleFirst(3, TimeUnit.SECONDS);
+        return new ViewClickObservable(view).compose(bindUntilEvent(FragmentEvent.DESTROY_VIEW));
     }
 
     protected final void checkedThenEnabled(CompoundButton compoundButton, View view) {

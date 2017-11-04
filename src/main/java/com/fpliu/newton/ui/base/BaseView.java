@@ -20,8 +20,6 @@ import android.widget.TextView;
 
 import com.fpliu.newton.log.Logger;
 
-import java.util.concurrent.TimeUnit;
-
 import io.reactivex.Observable;
 
 /**
@@ -224,11 +222,11 @@ public class BaseView extends CoordinatorLayout {
     }
 
     public Observable<View> getLeftBtnClickObservable() {
-        return leftView == null ? Observable.empty() : new ViewClickObservable(leftView).throttleFirst(3, TimeUnit.SECONDS);
+        return leftView == null ? Observable.empty() : new ViewClickObservable(leftView);
     }
 
     public Observable<View> getRightBtnClickObservable() {
-        return rightView == null ? Observable.empty() : new ViewClickObservable(rightView).throttleFirst(3, TimeUnit.SECONDS);
+        return rightView == null ? Observable.empty() : new ViewClickObservable(rightView);
     }
 
     public BaseView setLeftViewStrategy(IHeadViewStrategy<?> headViewStrategy) {
