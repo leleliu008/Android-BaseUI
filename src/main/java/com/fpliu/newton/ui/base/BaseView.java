@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.support.design.widget.CoordinatorLayout;
@@ -91,14 +90,18 @@ public class BaseView extends CoordinatorLayout {
         titleTv.setGravity(Gravity.CENTER);
         titleTv.setMaxLines(1);
         titleTv.setEllipsize(TextUtils.TruncateAt.END);
-        headView.addView(titleTv, new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        lp.leftMargin = UIUtil.dip2px(getContext(), BaseUIConfig.getTitlePaddingLeftRight());
+        lp.rightMargin = UIUtil.dip2px(getContext(), BaseUIConfig.getTitlePaddingLeftRight());
+        lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+        headView.addView(titleTv, lp);
 
         bodyView = new RelativeLayout(context);
         bodyView.setId(R.id.base_view_body);
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-        lp.addRule(RelativeLayout.BELOW, R.id.base_view_head);
-        lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        container.addView(bodyView, lp);
+        RelativeLayout.LayoutParams lp1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        lp1.addRule(RelativeLayout.BELOW, R.id.base_view_head);
+        lp1.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        container.addView(bodyView, lp1);
     }
 
     public BaseView addViewInBody(View view, RelativeLayout.LayoutParams lp) {
@@ -180,20 +183,8 @@ public class BaseView extends CoordinatorLayout {
     }
 
     public final BaseView setTitle(CharSequence title) {
-        titleTv = new TextView(getContext());
-        titleTv.setTextColor(Color.WHITE);
-        titleTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-        titleTv.setMaxLines(1);
-        titleTv.setEllipsize(TextUtils.TruncateAt.END);
         titleTv.setText(title);
-
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        lp.leftMargin = UIUtil.dip2px(getContext(), 60);
-        lp.rightMargin = UIUtil.dip2px(getContext(), 60);
-        lp.addRule(RelativeLayout.CENTER_IN_PARENT);
-        headView.addView(titleTv, lp);
         headView.setVisibility(VISIBLE);
-
         return this;
     }
 
