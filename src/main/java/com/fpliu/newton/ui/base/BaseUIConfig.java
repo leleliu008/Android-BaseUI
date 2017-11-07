@@ -2,6 +2,8 @@ package com.fpliu.newton.ui.base;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -15,11 +17,15 @@ public final class BaseUIConfig {
 
     private static int bgColor = Color.parseColor("#F2F2F2");
 
-    private static int headBgColor = Color.parseColor("#00aff0");
+    private static Drawable headBg = new ColorDrawable(Color.parseColor("#00aff0"));
 
     private static int headHeight = 60;
 
     private static int titlePaddingLeftRight = 60;
+
+    private static int titleColor = Color.WHITE;
+
+    private static int titleSizeSp = 20;
 
     private static String fontFileName;
 
@@ -55,16 +61,16 @@ public final class BaseUIConfig {
     }
 
     /**
-     * 设置标题栏的背景颜色
+     * 设置标题栏的背景
      *
-     * @param headBgColor 标题栏的背景颜色
+     * @param headBg 标题栏的背景
      */
-    public static void setHeadBgColor(int headBgColor) {
-        BaseUIConfig.headBgColor = headBgColor;
+    public static void setHeadBg(Drawable headBg) {
+        BaseUIConfig.headBg = headBg;
     }
 
-    public static int getHeadBgColor() {
-        return headBgColor;
+    public static Drawable getHeadBg() {
+        return headBg;
     }
 
     /**
@@ -78,6 +84,22 @@ public final class BaseUIConfig {
 
     public static int getHeadHeight() {
         return headHeight;
+    }
+
+    public static void setTitleColor(int titleColor) {
+        BaseUIConfig.titleColor = titleColor;
+    }
+
+    public static int getTitleColor() {
+        return titleColor;
+    }
+
+    public static void setTitleSizeSp(int titleSizeSp) {
+        BaseUIConfig.titleSizeSp = titleSizeSp;
+    }
+
+    public static int getTitleSizeSp() {
+        return titleSizeSp;
     }
 
     /**

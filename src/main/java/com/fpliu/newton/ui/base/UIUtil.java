@@ -581,7 +581,7 @@ public final class UIUtil {
             // do nothing
         }
 
-        snackbar.setActionTextColor(BaseUIConfig.getHeadBgColor());
+        snackbar.setActionTextColor(BaseUIConfig.getTitleColor());
         snackbar.setAction("确定", v -> snackbar.dismiss());
         snackbar.show();
         return snackbar;

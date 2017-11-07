@@ -81,7 +81,7 @@ public class BaseView extends CoordinatorLayout {
 
         headView = new RelativeLayout(context);
         headView.setId(R.id.base_view_head);
-        headView.setBackgroundColor(BaseUIConfig.getHeadBgColor());
+        headView.setBackgroundDrawable(BaseUIConfig.getHeadBg());
         headView.setVisibility(GONE);
         container.addView(headView, new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, BaseUIConfig.getHeadHeight()));
 
