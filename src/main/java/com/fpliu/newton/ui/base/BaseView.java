@@ -86,8 +86,8 @@ public class BaseView extends CoordinatorLayout {
         container.addView(headView, new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, BaseUIConfig.getHeadHeight()));
 
         titleTv = new TextView(context);
-        titleTv.setTextColor(Color.WHITE);
-        titleTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+        titleTv.setTextColor(BaseUIConfig.getTitleColor());
+        titleTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, BaseUIConfig.getTitleSizeSp());
         titleTv.setGravity(Gravity.CENTER);
         titleTv.setMaxLines(1);
         titleTv.setEllipsize(TextUtils.TruncateAt.END);
