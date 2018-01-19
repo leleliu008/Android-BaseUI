@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -58,7 +59,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseVi
                 .getLeftBtnClickObservable()
                 .compose(bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(o -> onLeftBtnClick());
-        setContentView(contentView);
+        super.setContentView(contentView);
     }
 
     @Override
@@ -85,10 +86,27 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseVi
         return contentView;
     }
 
-
     @Override
     public final void setContentView(int layoutResID) {
-        setContentView(View.inflate(this, layoutResID, null));
+        contentView.addViewInBody(View.inflate(this, layoutResID, null));
+    }
+
+    @Override
+    public void setContentView(View view) {
+        contentView.addViewInBody(view);
+    }
+
+    @Override
+    public void setContentView(View view, LayoutParams lp) {
+        if (lp == null) {
+            contentView.addViewInBody(view, new RelativeLayout.LayoutParams(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.MATCH_PARENT));
+        } else {
+            contentView.addViewInBody(view, new RelativeLayout.LayoutParams(lp.width, lp.height));
+        }
+    }
+
+    public final void addContentView(int layoutId) {
+        View.inflate(this, layoutId, contentView);
     }
 
     public final void addContentView(View view) {
@@ -99,25 +117,21 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseVi
         contentView.addView(view, lp);
     }
 
-    public final void addContentView(int layoutId) {
-        View.inflate(this, layoutId, contentView);
-    }
-
     @Override
     public void addContentView(View view, LayoutParams lp) {
         contentView.addView(view, lp);
     }
 
-    public final void addViewInBody(View view, RelativeLayout.LayoutParams lp) {
-        contentView.addViewInBody(view, lp);
+    public final void addViewInBody(int layoutId) {
+        contentView.addViewInBody(layoutId);
     }
 
     public final void addViewInBody(View view) {
         contentView.addViewInBody(view);
     }
 
-    public final void addViewInBody(int layoutId) {
-        contentView.addViewInBody(layoutId);
+    public final void addViewInBody(View view, RelativeLayout.LayoutParams lp) {
+        contentView.addViewInBody(view, lp);
     }
 
     @Override
