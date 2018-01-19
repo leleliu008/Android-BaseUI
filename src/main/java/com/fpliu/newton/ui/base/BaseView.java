@@ -110,7 +110,12 @@ public class BaseView extends CoordinatorLayout {
     }
 
     public BaseView addViewInBody(View view) {
-        bodyView.addView(view, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        ViewGroup.LayoutParams lp = view.getLayoutParams();
+        if (lp == null) {
+            bodyView.addView(view, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        } else {
+            bodyView.addView(view, new LayoutParams(lp.width, lp.height));
+        }
         return this;
     }
 
@@ -120,7 +125,7 @@ public class BaseView extends CoordinatorLayout {
      * @param layoutId 布局文件的ID
      */
     public BaseView addViewInBody(int layoutId) {
-        bodyView.addView(View.inflate(getContext(), layoutId, null), new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        View.inflate(getContext(), layoutId, bodyView);
         return this;
     }
 

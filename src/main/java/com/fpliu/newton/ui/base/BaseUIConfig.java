@@ -57,7 +57,7 @@ public final class BaseUIConfig {
     }
 
     public static int getBgColor() {
-        return bgColor;
+        return BaseUIConfig.bgColor;
     }
 
     /**
