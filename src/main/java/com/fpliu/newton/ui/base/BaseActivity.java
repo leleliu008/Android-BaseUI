@@ -105,20 +105,20 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseVi
         }
     }
 
-    public final void addContentView(int layoutId) {
-        View.inflate(this, layoutId, contentView);
+    public final BaseView addContentView(int layoutId) {
+        return contentView.addView(layoutId);
     }
 
     public final void addContentView(View view) {
-        LayoutParams lp = view.getLayoutParams();
-        if (lp == null) {
-            lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-        }
+        contentView.addView(view);
+    }
+
+    public final void addContentView(View view, BaseView.LayoutParams lp) {
         contentView.addView(view, lp);
     }
 
     @Override
-    public void addContentView(View view, LayoutParams lp) {
+    public final void addContentView(View view, LayoutParams lp) {
         contentView.addView(view, lp);
     }
 
