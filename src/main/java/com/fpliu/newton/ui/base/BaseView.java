@@ -7,6 +7,8 @@ import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -14,6 +16,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -126,6 +130,111 @@ public class BaseView extends CoordinatorLayout {
      */
     public BaseView addViewInBody(int layoutId) {
         View.inflate(getContext(), layoutId, bodyView);
+        return this;
+    }
+
+    @Override
+    public void addView(View view, ViewGroup.LayoutParams lp) {
+        BaseView.LayoutParams lp2;
+        if (lp == null) {
+            lp2 = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        } else {
+            lp2 = new LayoutParams(lp.width, lp.height);
+            if (lp instanceof MarginLayoutParams) {
+                MarginLayoutParams marginLayoutParams = (MarginLayoutParams) lp;
+                lp2.topMargin = marginLayoutParams.topMargin;
+                lp2.leftMargin = marginLayoutParams.leftMargin;
+                lp2.rightMargin = marginLayoutParams.rightMargin;
+                lp2.bottomMargin = marginLayoutParams.bottomMargin;
+                if (lp instanceof FrameLayout.LayoutParams) {
+                    lp2.gravity = ((FrameLayout.LayoutParams)lp).gravity;
+                } else if (lp instanceof LinearLayout.LayoutParams) {
+                    lp2.gravity = ((LinearLayout.LayoutParams)lp).gravity;
+                } else if (lp instanceof DrawerLayout.LayoutParams) {
+                    lp2.gravity = ((DrawerLayout.LayoutParams)lp).gravity;
+                } else if (lp instanceof ViewPager.LayoutParams) {
+                    lp2.gravity = ((ViewPager.LayoutParams)lp).gravity;
+                }
+            }
+        }
+        super.addView(view, lp2);
+    }
+
+    @Override
+    public void addView(View view) {
+        ViewGroup.LayoutParams lp = view.getLayoutParams();
+        BaseView.LayoutParams lp2;
+        if (lp == null) {
+            lp2 = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        } else {
+            lp2 = new LayoutParams(lp.width, lp.height);
+            if (lp instanceof MarginLayoutParams) {
+                MarginLayoutParams marginLayoutParams = (MarginLayoutParams) lp;
+                lp2.topMargin = marginLayoutParams.topMargin;
+                lp2.leftMargin = marginLayoutParams.leftMargin;
+                lp2.rightMargin = marginLayoutParams.rightMargin;
+                lp2.bottomMargin = marginLayoutParams.bottomMargin;
+                if (lp instanceof FrameLayout.LayoutParams) {
+                    lp2.gravity = ((FrameLayout.LayoutParams)lp).gravity;
+                } else if (lp instanceof LinearLayout.LayoutParams) {
+                    lp2.gravity = ((LinearLayout.LayoutParams)lp).gravity;
+                } else if (lp instanceof DrawerLayout.LayoutParams) {
+                    lp2.gravity = ((DrawerLayout.LayoutParams)lp).gravity;
+                } else if (lp instanceof ViewPager.LayoutParams) {
+                    lp2.gravity = ((ViewPager.LayoutParams)lp).gravity;
+                }
+            }
+        }
+        super.addView(view, lp2);
+    }
+
+    public BaseView addView(View view, BaseView.LayoutParams lp) {
+        super.addView(view, lp);
+        return this;
+    }
+
+    public BaseView addView(View view, int gravity, int xOffset, int yOffset) {
+        ViewGroup.LayoutParams lp = view.getLayoutParams();
+        BaseView.LayoutParams lp2;
+        if (lp == null) {
+            lp2 = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        } else {
+            lp2 = new LayoutParams(lp.width, lp.height);
+        }
+        lp2.gravity = gravity;
+        switch (gravity) {
+            case Gravity.LEFT | Gravity.TOP:
+                lp2.leftMargin = xOffset;
+                lp2.topMargin = yOffset;
+                break;
+            case Gravity.LEFT | Gravity.BOTTOM:
+                lp2.leftMargin = xOffset;
+                lp2.bottomMargin = yOffset;
+                break;
+            case Gravity.RIGHT | Gravity.TOP:
+                lp2.rightMargin = xOffset;
+                lp2.topMargin = yOffset;
+                break;
+            case Gravity.RIGHT | Gravity.BOTTOM:
+                lp2.rightMargin = xOffset;
+                lp2.bottomMargin = yOffset;
+                break;
+            case Gravity.CENTER:
+                lp2.leftMargin = xOffset;
+                lp2.topMargin = yOffset;
+                break;
+        }
+        super.addView(view, lp);
+        return this;
+    }
+
+    /**
+     * 注意：这几个重载的方法不同互相调用，因为子类可能会重写，会出现不肯想象的结果
+     *
+     * @param layoutId 布局文件的ID
+     */
+    public BaseView addView(int layoutId) {
+        View.inflate(getContext(), layoutId, this);
         return this;
     }
 
