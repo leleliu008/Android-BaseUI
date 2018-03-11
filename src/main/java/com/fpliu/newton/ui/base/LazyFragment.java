@@ -1,6 +1,7 @@
 package com.fpliu.newton.ui.base;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -41,7 +42,7 @@ public class LazyFragment extends BaseFragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Bundle args = savedInstanceState == null ? getArguments() : savedInstanceState;
@@ -52,7 +53,7 @@ public class LazyFragment extends BaseFragment {
     }
 
     @Override
-    public BaseView onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public BaseView onCreateView(LayoutInflater inflater, ViewGroup container, @Nullable Bundle savedInstanceState) {
         BaseView baseView = super.onCreateView(inflater, container, savedInstanceState);
 
         if (isLazyLoad) {
@@ -119,7 +120,7 @@ public class LazyFragment extends BaseFragment {
 
     }
 
-    protected void onCreateViewLazy(BaseView baseView, Bundle savedInstanceState) {
+    protected void onCreateViewLazy(BaseView baseView, @Nullable Bundle savedInstanceState) {
 
     }
 
@@ -155,7 +156,7 @@ public class LazyFragment extends BaseFragment {
 
     @Override
     @Deprecated
-    public final void onDestroyView() {
+    public void onDestroyView() {
         super.onDestroyView();
         if (isInit) {
             onDestroyViewLazy();

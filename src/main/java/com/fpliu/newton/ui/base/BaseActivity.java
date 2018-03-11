@@ -164,7 +164,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseVi
 
     public final void showToast(CharSequence text) {
         if (!isFinishing()) {
-            UIUtil.makeToast(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+            UIUtil.makeToast(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
         }
     }
 
