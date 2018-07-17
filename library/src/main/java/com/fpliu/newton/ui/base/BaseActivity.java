@@ -4,13 +4,12 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
+import android.support.annotation.IntRange;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.CompoundButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,9 +55,9 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseVi
         contentView.setId(R.id.base_view);
         contentView.setNetworkChangeListener(this);
         contentView.setLeftViewStrategy(BaseUIConfig.getLeftBtn())
-                .getLeftBtnClickObservable()
-                .compose(bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(o -> onLeftBtnClick());
+            .getLeftBtnClickObservable()
+            .compose(bindUntilEvent(ActivityEvent.DESTROY))
+            .subscribe(o -> onLeftBtnClick());
         super.setContentView(contentView);
     }
 
@@ -88,21 +87,17 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseVi
 
     @Override
     public final void setContentView(int layoutResID) {
-        contentView.addViewInBody(View.inflate(this, layoutResID, null));
+        contentView.addView(layoutResID);
     }
 
     @Override
     public void setContentView(View view) {
-        contentView.addViewInBody(view);
+        contentView.addView(view);
     }
 
     @Override
     public void setContentView(View view, LayoutParams lp) {
-        if (lp == null) {
-            contentView.addViewInBody(view, new RelativeLayout.LayoutParams(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.MATCH_PARENT));
-        } else {
-            contentView.addViewInBody(view, new RelativeLayout.LayoutParams(lp.width, lp.height));
-        }
+        contentView.addView(view, lp);
     }
 
     public final BaseView addContentView(int layoutId) {
@@ -120,18 +115,6 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseVi
     @Override
     public final void addContentView(View view, LayoutParams lp) {
         contentView.addView(view, lp);
-    }
-
-    public final void addViewInBody(int layoutId) {
-        contentView.addViewInBody(layoutId);
-    }
-
-    public final void addViewInBody(View view) {
-        contentView.addViewInBody(view);
-    }
-
-    public final void addViewInBody(View view, RelativeLayout.LayoutParams lp) {
-        contentView.addViewInBody(view, lp);
     }
 
     @Override
@@ -154,17 +137,27 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseVi
         }
     }
 
-    public final void showToast(int resId) {
-        try {
-            showToast(getResources().getString(resId));
-        } catch (Exception e) {
-            Logger.e(getClass().getSimpleName(), "showToast()", e);
+    public final void showToast(String text, @IntRange(from = 0) Long remainTime) {
+        if (contentView != null) {
+            contentView.showToast(text, remainTime);
         }
     }
 
-    public final void showToast(CharSequence text) {
-        if (!isFinishing()) {
-            UIUtil.makeToast(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+    public final void showToast(String text) {
+        if (contentView != null) {
+            contentView.showToast(text, 3L);
+        }
+    }
+
+    public final void showToastDontDismiss(String text) {
+        if (contentView != null) {
+            contentView.showToastDontDismiss(text);
+        }
+    }
+
+    public final void dismissToast() {
+        if (contentView != null) {
+            contentView.dismissToast();
         }
     }
 
@@ -215,8 +208,8 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseVi
             return;
         }
         RxCompoundButton.checkedChanges(compoundButton)
-                .compose(bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(RxView.enabled(view));
+            .compose(bindUntilEvent(ActivityEvent.DESTROY))
+            .subscribe(RxView.enabled(view));
     }
 
     protected final void checkedThenEnabled(int compoundButtonId, int viewId) {
@@ -227,8 +220,8 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseVi
         }
         if (view1 instanceof CompoundButton) {
             RxCompoundButton.checkedChanges((CompoundButton) view1)
-                    .compose(bindUntilEvent(ActivityEvent.DESTROY))
-                    .subscribe(RxView.enabled(view2));
+                .compose(bindUntilEvent(ActivityEvent.DESTROY))
+                .subscribe(RxView.enabled(view2));
         }
     }
 
@@ -238,8 +231,8 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseVi
             return;
         }
         RxCompoundButton.checkedChanges(compoundButton)
-                .compose(bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(RxView.enabled(view));
+            .compose(bindUntilEvent(ActivityEvent.DESTROY))
+            .subscribe(RxView.enabled(view));
     }
 
     protected final void checkedThenEnabled(int compoundButtonId, View view) {
@@ -249,15 +242,15 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseVi
         }
         if (view1 instanceof CompoundButton) {
             RxCompoundButton.checkedChanges((CompoundButton) view1)
-                    .compose(bindUntilEvent(ActivityEvent.DESTROY))
-                    .subscribe(RxView.enabled(view));
+                .compose(bindUntilEvent(ActivityEvent.DESTROY))
+                .subscribe(RxView.enabled(view));
         }
     }
 
     protected final void notEmptyThenEnabled(TextView textView, View view) {
         afterTextChange(textView)
-                .map(text -> !TextUtils.isEmpty(text))
-                .subscribe(RxView.enabled(view));
+            .map(text -> !TextUtils.isEmpty(text))
+            .subscribe(RxView.enabled(view));
     }
 
     protected final void notEmptyThenEnabled(int textViewId, int viewId) {
@@ -268,8 +261,8 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseVi
         }
         if (view1 instanceof TextView) {
             afterTextChange((TextView) view1)
-                    .map(text -> !TextUtils.isEmpty(text))
-                    .subscribe(RxView.enabled(view2));
+                .map(text -> !TextUtils.isEmpty(text))
+                .subscribe(RxView.enabled(view2));
         }
     }
 
@@ -279,8 +272,8 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseVi
             return;
         }
         afterTextChange(textView)
-                .map(text -> !TextUtils.isEmpty(text))
-                .subscribe(RxView.enabled(view));
+            .map(text -> !TextUtils.isEmpty(text))
+            .subscribe(RxView.enabled(view));
     }
 
     protected final void notEmptyThenEnabled(int textViewId, View view) {
@@ -290,8 +283,8 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseVi
         }
         if (view1 instanceof TextView) {
             afterTextChange((TextView) view1)
-                    .map(text -> !TextUtils.isEmpty(text))
-                    .subscribe(RxView.enabled(view));
+                .map(text -> !TextUtils.isEmpty(text))
+                .subscribe(RxView.enabled(view));
         }
     }
 

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -34,6 +35,8 @@ public class BaseView extends CoordinatorLayout {
 
     private static final String TAG = BaseView.class.getSimpleName();
 
+    private ToastLayout toastLayout;
+
     /**
      * 标题栏文本
      */
@@ -53,11 +56,6 @@ public class BaseView extends CoordinatorLayout {
      * 标题栏
      */
     private RelativeLayout headView;
-
-    /**
-     * 标题栏下面的视图
-     */
-    private RelativeLayout bodyView;
 
     private NetworkChangeListener networkChangeListener;
 
@@ -79,14 +77,16 @@ public class BaseView extends CoordinatorLayout {
     private void init(Context context) {
         setBackgroundColor(BaseUIConfig.getBgColor());
 
-        RelativeLayout container = new RelativeLayout(context);
-        addView(container, new CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.MATCH_PARENT));
+        AppBarLayout appBarLayout = new AppBarLayout(context);
+        addView(appBarLayout, new CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
         headView = new RelativeLayout(context);
         headView.setId(R.id.base_view_head);
         headView.setBackgroundDrawable(BaseUIConfig.getHeadBg());
         headView.setVisibility(GONE);
-        container.addView(headView, new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, BaseUIConfig.getHeadHeight()));
+        AppBarLayout.LayoutParams lp2 = new AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, BaseUIConfig.getHeadHeight());
+        lp2.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP);
+        appBarLayout.addView(headView, lp2);
 
         titleTv = new TextView(context);
         titleTv.setTextColor(BaseUIConfig.getTitleColor());
@@ -100,37 +100,8 @@ public class BaseView extends CoordinatorLayout {
         lp.addRule(RelativeLayout.CENTER_IN_PARENT);
         headView.addView(titleTv, lp);
 
-        bodyView = new RelativeLayout(context);
-        bodyView.setId(R.id.base_view_body);
-        RelativeLayout.LayoutParams lp1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-        lp1.addRule(RelativeLayout.BELOW, R.id.base_view_head);
-        lp1.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        container.addView(bodyView, lp1);
-    }
-
-    public BaseView addViewInBody(View view, RelativeLayout.LayoutParams lp) {
-        bodyView.addView(view, lp);
-        return this;
-    }
-
-    public BaseView addViewInBody(View view) {
-        ViewGroup.LayoutParams lp = view.getLayoutParams();
-        if (lp == null) {
-            bodyView.addView(view, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-        } else {
-            bodyView.addView(view, new LayoutParams(lp.width, lp.height));
-        }
-        return this;
-    }
-
-    /**
-     * 注意：这几个重载的方法不同互相调用，因为子类可能会重写，会出现不肯想象的结果
-     *
-     * @param layoutId 布局文件的ID
-     */
-    public BaseView addViewInBody(int layoutId) {
-        View.inflate(getContext(), layoutId, bodyView);
-        return this;
+        toastLayout = new ToastLayout(context);
+        addView(toastLayout, new CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.MATCH_PARENT, BaseUIConfig.getHeadHeight()));
     }
 
     @Override
@@ -147,13 +118,13 @@ public class BaseView extends CoordinatorLayout {
                 lp2.rightMargin = marginLayoutParams.rightMargin;
                 lp2.bottomMargin = marginLayoutParams.bottomMargin;
                 if (lp instanceof FrameLayout.LayoutParams) {
-                    lp2.gravity = ((FrameLayout.LayoutParams)lp).gravity;
+                    lp2.gravity = ((FrameLayout.LayoutParams) lp).gravity;
                 } else if (lp instanceof LinearLayout.LayoutParams) {
-                    lp2.gravity = ((LinearLayout.LayoutParams)lp).gravity;
+                    lp2.gravity = ((LinearLayout.LayoutParams) lp).gravity;
                 } else if (lp instanceof DrawerLayout.LayoutParams) {
-                    lp2.gravity = ((DrawerLayout.LayoutParams)lp).gravity;
+                    lp2.gravity = ((DrawerLayout.LayoutParams) lp).gravity;
                 } else if (lp instanceof ViewPager.LayoutParams) {
-                    lp2.gravity = ((ViewPager.LayoutParams)lp).gravity;
+                    lp2.gravity = ((ViewPager.LayoutParams) lp).gravity;
                 }
             }
         }
@@ -175,20 +146,20 @@ public class BaseView extends CoordinatorLayout {
                 lp2.rightMargin = marginLayoutParams.rightMargin;
                 lp2.bottomMargin = marginLayoutParams.bottomMargin;
                 if (lp instanceof FrameLayout.LayoutParams) {
-                    lp2.gravity = ((FrameLayout.LayoutParams)lp).gravity;
+                    lp2.gravity = ((FrameLayout.LayoutParams) lp).gravity;
                 } else if (lp instanceof LinearLayout.LayoutParams) {
-                    lp2.gravity = ((LinearLayout.LayoutParams)lp).gravity;
+                    lp2.gravity = ((LinearLayout.LayoutParams) lp).gravity;
                 } else if (lp instanceof DrawerLayout.LayoutParams) {
-                    lp2.gravity = ((DrawerLayout.LayoutParams)lp).gravity;
+                    lp2.gravity = ((DrawerLayout.LayoutParams) lp).gravity;
                 } else if (lp instanceof ViewPager.LayoutParams) {
-                    lp2.gravity = ((ViewPager.LayoutParams)lp).gravity;
+                    lp2.gravity = ((ViewPager.LayoutParams) lp).gravity;
                 }
             }
         }
         super.addView(view, lp2);
     }
 
-    public BaseView addView(View view, BaseView.LayoutParams lp) {
+    public BaseView addView(View view, CoordinatorLayout.LayoutParams lp) {
         super.addView(view, lp);
         return this;
     }
@@ -382,6 +353,22 @@ public class BaseView extends CoordinatorLayout {
             headViewStrategy.onCreateView(headView);
         }
         return this;
+    }
+
+    public final void showToast(String text, Long remainTime) {
+        toastLayout.show(text, remainTime);
+    }
+
+    public final void showToast(String text) {
+        toastLayout.show(text, 3);
+    }
+
+    public final void showToastDontDismiss(String text) {
+        toastLayout.show(text, 0);
+    }
+
+    public final void dismissToast() {
+        toastLayout.dismiss();
     }
 
     @Override

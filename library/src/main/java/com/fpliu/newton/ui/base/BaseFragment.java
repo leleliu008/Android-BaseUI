@@ -70,21 +70,21 @@ public abstract class BaseFragment extends RxFragment implements BaseView.Networ
         if (contentView == null) {
             return;
         }
-        contentView.addViewInBody(view, params);
+        contentView.addView(view, params);
     }
 
     public final void addViewInBody(View view) {
         if (contentView == null) {
             return;
         }
-        contentView.addViewInBody(view);
+        contentView.addView(view);
     }
 
     public final void addViewInBody(int layoutId) {
         if (contentView == null) {
             return;
         }
-        contentView.addViewInBody(layoutId);
+        contentView.addView(layoutId);
     }
 
     /**
