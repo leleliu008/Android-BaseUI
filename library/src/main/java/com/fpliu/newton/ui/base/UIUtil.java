@@ -81,7 +81,7 @@ public final class UIUtil {
 
     public static int dp2px(Context context, int dp) {
         return Math.round(TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics()));
+            TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics()));
     }
 
     /**
@@ -199,11 +199,11 @@ public final class UIUtil {
                 argClass[0] = int.class;
                 argClass[1] = Paint.class;
                 Method setLayerType = View.class.getDeclaredMethod(
-                        "setLayerType", argClass);
+                    "setLayerType", argClass);
                 setLayerType.setAccessible(true);
 
                 Field LAYER_TYPE_SOFTWARE = View.class
-                        .getDeclaredField("LAYER_TYPE_SOFTWARE");
+                    .getDeclaredField("LAYER_TYPE_SOFTWARE");
                 LAYER_TYPE_SOFTWARE.setAccessible(true);
                 int value = LAYER_TYPE_SOFTWARE.getInt(null);
 
@@ -361,9 +361,9 @@ public final class UIUtil {
 
         //如果触摸点处于此view的矩形区域内
         return rawX >= XY.locationOfViewOnScreen[0]
-                && rawX <= (XY.locationOfViewOnScreen[0] + view.getWidth())
-                && rawY >= XY.locationOfViewOnScreen[1]
-                && rawY <= (XY.locationOfViewOnScreen[1] + view.getHeight());
+            && rawX <= (XY.locationOfViewOnScreen[0] + view.getWidth())
+            && rawY >= XY.locationOfViewOnScreen[1]
+            && rawY <= (XY.locationOfViewOnScreen[1] + view.getHeight());
     }
 
     /**
@@ -503,7 +503,7 @@ public final class UIUtil {
             // processName:
             // The name of the process that this object is associated with.
             if (appProcess.processName.equals(context.getPackageName())
-                    && appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                && appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
                 return true;
             }
         }
@@ -539,8 +539,8 @@ public final class UIUtil {
             intent = new Intent(Settings.ACTION_SETTINGS);
         }
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                | Intent.FLAG_ACTIVITY_SINGLE_TOP
-                | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            | Intent.FLAG_ACTIVITY_SINGLE_TOP
+            | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         try {
             context.startActivity(intent);
@@ -566,7 +566,7 @@ public final class UIUtil {
     public static boolean isNetworkAvailable(Context context) {
         // 获取系统的连接服务
         ConnectivityManager connectivityManager = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
+            .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetInfo != null && activeNetInfo.isConnected();
     }
@@ -581,7 +581,7 @@ public final class UIUtil {
             // do nothing
         }
 
-        snackbar.setActionTextColor(BaseUIConfig.getTitleColor());
+        snackbar.setActionTextColor(BaseUIConfig.INSTANCE.getTitleColor());
         snackbar.setAction("确定", v -> snackbar.dismiss());
         snackbar.show();
         return snackbar;

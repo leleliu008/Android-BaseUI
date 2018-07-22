@@ -4,10 +4,12 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CoordinatorLayout
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.widget.NestedScrollView
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -16,10 +18,6 @@ import com.fpliu.newton.ui.base.BaseUIConfig
 import com.fpliu.newton.ui.base.UIUtil
 import com.fpliu.newton.ui.recyclerview.adapter.ItemAdapter
 import com.fpliu.newton.ui.recyclerview.holder.ItemViewHolder
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
 
 /**
  * BaseUI使用示例
@@ -30,7 +28,7 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         //统一设置标题栏高度
         val headHeight = UIUtil.dp2px(this, 48)
-        BaseUIConfig.setHeadHeight(headHeight)
+        BaseUIConfig.headHeight = headHeight
 
 
         super.onCreate(savedInstanceState)
@@ -53,6 +51,9 @@ class MainActivity : BaseActivity() {
             scaleType = ImageView.ScaleType.FIT_XY
             setImageResource(R.drawable.notify_panel_notification_icon_bg)
             container.addView(this, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 200))
+            setOnClickListener {
+                dismissToast()
+            }
         }
 
         val items = arrayListOf<String>()
@@ -78,12 +79,36 @@ class MainActivity : BaseActivity() {
             container.addView(this)
         }
 
-        Observable
-            .intervalRange(0, 100, 2, 6, TimeUnit.SECONDS)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                showToast("网路状况不佳，请切换Wi-Fi")
-            }
+//        Observable.timer(5, TimeUnit.SECONDS)
+//            .subscribeOn(Schedulers.io())
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .subscribe {
+//                showToast("网路状况不佳，请切换Wi-Fi")
+//            }
+
+//        Observable
+//            .intervalRange(0, 100, 5, 6, TimeUnit.SECONDS)
+//            .subscribeOn(Schedulers.io())
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .subscribe {
+//                showToast("网路状况不佳，请切换Wi-Fi")
+//            }
+        var i = 0
+
+        (contentView.toastLayout.layoutParams as CoordinatorLayout.LayoutParams).run {
+            topMargin = UIUtil.getStatusBarHeight(window)
+            contentView.toastLayout.layoutParams = this
+        }
+
+        val fab = FloatingActionButton(this)
+        fab.setOnClickListener {
+            showToast("${i++}...网路状况不佳，请切换Wi-Fi")
+        }
+        val lp2 = CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.MATCH_PARENT).apply {
+            gravity = Gravity.BOTTOM or Gravity.RIGHT
+            bottomMargin = 30
+            rightMargin = 30
+        }
+        addContentView(fab, lp2)
     }
 }

@@ -24,21 +24,29 @@ public class LazyFragment extends BaseFragment {
 
     public static final String KEY_IS_LAZY_LOAD = "isLazyLoad";
 
-    private boolean isLazyLoad = true;
+    //是否需要使用懒加载的标志
+    private boolean needLazyLoad = true;
 
-    private boolean isInit = false;
+    //是否被创建了
+    private boolean isCreated = false;
+
+    //是否被初始化了
+    private boolean isInitialized = false;
+
+    //是否启动了
+    private boolean isStarted = false;
 
     private Bundle savedInstanceState;
 
     protected boolean isLazyLoad() {
-        return isLazyLoad;
+        return needLazyLoad;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putBoolean(KEY_IS_LAZY_LOAD, isLazyLoad);
+        outState.putBoolean(KEY_IS_LAZY_LOAD, needLazyLoad);
     }
 
     @Override
@@ -48,22 +56,23 @@ public class LazyFragment extends BaseFragment {
         Bundle args = savedInstanceState == null ? getArguments() : savedInstanceState;
 
         if (args != null) {
-            isLazyLoad = args.getBoolean(KEY_IS_LAZY_LOAD, true);
+            needLazyLoad = args.getBoolean(KEY_IS_LAZY_LOAD, true);
         }
+        isCreated = true;
     }
 
     @Override
     public BaseView onCreateView(LayoutInflater inflater, ViewGroup container, @Nullable Bundle savedInstanceState) {
         BaseView baseView = super.onCreateView(inflater, container, savedInstanceState);
 
-        if (isLazyLoad) {
-            if (getUserVisibleHint() && !isInit) {
-                isInit = true;
+        if (needLazyLoad) {
+            if (getUserVisibleHint() && !isInitialized) {
+                isInitialized = true;
                 this.savedInstanceState = savedInstanceState;
                 onCreateViewLazy(baseView, savedInstanceState);
             }
         } else {
-            isInit = true;
+            isInitialized = true;
             onCreateViewLazy(baseView, savedInstanceState);
         }
 
@@ -74,17 +83,17 @@ public class LazyFragment extends BaseFragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
 
-        if (isVisibleToUser && !isInit && getContentView() != null) {
-            isInit = true;
+        if (isVisibleToUser && !isInitialized && isCreated) {
+            isInitialized = true;
             onCreateViewLazy(getContentView(), savedInstanceState);
             onResumeLazy();
         }
-        if (isInit && getContentView() != null) {
+        if (isInitialized && isCreated) {
             if (isVisibleToUser) {
-                isStart = true;
+                isStarted = true;
                 onFragmentStartLazy();
             } else {
-                isStart = false;
+                isStarted = false;
                 onFragmentStopLazy();
             }
         }
@@ -94,8 +103,8 @@ public class LazyFragment extends BaseFragment {
     @Override
     public final void onStart() {
         super.onStart();
-        if (isInit && !isStart && getUserVisibleHint()) {
-            isStart = true;
+        if (isInitialized && !isStarted && getUserVisibleHint()) {
+            isStarted = true;
             onFragmentStartLazy();
         }
     }
@@ -104,13 +113,11 @@ public class LazyFragment extends BaseFragment {
     @Override
     public final void onStop() {
         super.onStop();
-        if (isInit && isStart && getUserVisibleHint()) {
-            isStart = false;
+        if (isInitialized && isStarted && getUserVisibleHint()) {
+            isStarted = false;
             onFragmentStopLazy();
         }
     }
-
-    private boolean isStart = false;
 
     protected void onFragmentStartLazy() {
 
@@ -140,7 +147,7 @@ public class LazyFragment extends BaseFragment {
     @Deprecated
     public final void onResume() {
         super.onResume();
-        if (isInit) {
+        if (isInitialized) {
             onResumeLazy();
         }
     }
@@ -149,7 +156,7 @@ public class LazyFragment extends BaseFragment {
     @Deprecated
     public final void onPause() {
         super.onPause();
-        if (isInit) {
+        if (isInitialized) {
             onPauseLazy();
         }
     }
@@ -158,9 +165,10 @@ public class LazyFragment extends BaseFragment {
     @Deprecated
     public void onDestroyView() {
         super.onDestroyView();
-        if (isInit) {
+        if (isInitialized) {
             onDestroyViewLazy();
         }
-        isInit = false;
+        isInitialized = false;
+        isCreated = false;
     }
 }
