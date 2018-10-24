@@ -1,5 +1,6 @@
 package com.fpliu.newton.ui.base
 
+import android.content.Context
 import android.os.Bundle
 import android.support.annotation.*
 import android.support.annotation.IntRange
@@ -29,7 +30,7 @@ abstract class BaseFragment : RxFragment(), BaseView.NetworkChangeListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        contentView = BaseView(activity)
+        contentView = BaseView(activity as Context)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): BaseView? {
@@ -191,7 +192,7 @@ abstract class BaseFragment : RxFragment(), BaseView.NetworkChangeListener {
         }
     }
 
-    protected fun afterTextChange(@IdRes textViewId: Int): Observable<String> {
+    protected fun afterTextChange2(@IdRes textViewId: Int): Observable<String> {
         return RxTextView.afterTextChangeEvents(contentView.findViewById(textViewId) as TextView).compose(bindUntilEvent(FragmentEvent.DESTROY_VIEW)).map { event ->
             event.editable()?.toString() ?: ""
         }

@@ -47,8 +47,10 @@ class ToastLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
 
     private var translation: Float = 0f
 
+    private var currentShowingItem = AtomicReference<Item>()
+
     init {
-        setBackgroundColor(Color.parseColor("#2ed5f9"))
+        setBackgroundColor(BaseUIConfig.toastLayoutBgColor)
         setTextColor(Color.WHITE)
         setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
         gravity = Gravity.CENTER
@@ -69,18 +71,23 @@ class ToastLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
 
     fun show(text: String, @IntRange(from = 0) remainTime: Long = 3) {
         val item = Item(text, remainTime)
-        when {
-            currentState.compareAndSet(State.SHOWING_EX, State.SHOWING) -> {
-                setText(text)
-                showing(item)
+        if (currentState.compareAndSet(State.IDLE, State.ANIM_TO_SHOW)) {
+            startShow(item)
+        } else {
+            //与当前正在展示的一样，就忽略掉
+            if (item != currentShowingItem.get()) {
+                if (currentState.compareAndSet(State.SHOWING_EX, State.SHOWING)) {
+                    showing(item)
+                } else {
+                    queue.add(item)
+                }
             }
-            currentState.compareAndSet(State.IDLE, State.SHOWING) -> startShow(item)
-            else -> queue.add(item)
         }
     }
 
     private fun startShow(item: Item) {
         currentState.set(State.ANIM_TO_SHOW)
+        currentShowingItem.set(item)
         text = item.text
         animator = ObjectAnimator.ofFloat(this, "translationY", translationY, 0f).apply {
             duration = 500
@@ -97,6 +104,10 @@ class ToastLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
 
     private fun showing(item: Item) {
         currentState.set(State.SHOWING)
+        currentShowingItem.set(item)
+
+        text = item.text
+
         //显示一段时间之后查看要不要关闭
         val remainTime = item.remainTime
         disposable = Observable
@@ -135,6 +146,7 @@ class ToastLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
                         val newItem = queue.poll()
                         if (newItem == null) { //队列为空了
                             currentState.set(State.IDLE)
+                            currentShowingItem.set(null)
                         } else { //队列中有数据，重新开始动画
                             startShow(newItem)
                         }

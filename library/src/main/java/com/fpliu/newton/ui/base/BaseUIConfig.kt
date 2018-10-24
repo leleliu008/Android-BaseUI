@@ -18,31 +18,29 @@ import android.widget.RelativeLayout
 object BaseUIConfig {
 
     /**
-     * 设置背景颜色
-     *
-     * @param bgColor 背景颜色
+     * 背景颜色
      */
     @ColorInt
     var bgColor: Int = Color.parseColor("#F2F2F2")
 
     /**
-     * 设置标题栏的背景
-     *
-     * @param headBg 标题栏的背景
+     * 标题栏的背景
      */
     var headBg: Drawable = ColorDrawable(Color.parseColor("#00aff0"))
 
     /**
-     * 设置标题栏的高度）
-     *
-     * @param headHeight 标题栏的高度，单位：px
+     * toastLayout背景颜色
+     */
+    @ColorInt
+    var toastLayoutBgColor: Int = Color.parseColor("#00ddbb")
+
+    /**
+     * 标题栏的高度，单位：px
      */
     var headHeight = 60
 
     /**
-     * 设置标题栏两边的边距
-     *
-     * @param titlePaddingLeftRight 标题栏两边的边距，单位：px
+     *  标题栏两边的边距，单位：px
      */
     var titlePaddingLeftRight = 60
 
@@ -56,9 +54,7 @@ object BaseUIConfig {
     var appBarLayoutElevation: Float = 0f
 
     /**
-     * 设置字体
-     *
-     * @param fontFileName 字体文件存放在assets目录中
+     * 字体文件，存放在assets目录中
      */
     var fontFileName: String? = null
 

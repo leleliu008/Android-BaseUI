@@ -29,14 +29,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion(26)
-    buildToolsVersion("26.0.2")
+    compileSdkVersion(27)
 
     defaultConfig {
-        minSdkVersion(14)
+        minSdkVersion(18)
         targetSdkVersion(25)
         versionCode = 1
-        versionName = "1.0.0"
+        versionName = "1.0.1"
     }
 
     sourceSets {
@@ -67,9 +66,9 @@ dependencies {
     api(fileTree(mapOf(Pair("dir", "src/main/libs"), Pair("include", "*.jar"))))
 
     //http://kotlinlang.org/docs/reference/using-gradle.html#configuring-dependencies
-    api("org.jetbrains.kotlin:kotlin-stdlib:1.2.21")
+    api("org.jetbrains.kotlin:kotlin-stdlib:1.2.50")
 
-    api("com.android.support:design:25.3.1")
+    api("com.android.support:design:27.1.1")
     api("com.jakewharton.rxbinding2:rxbinding:2.0.0")
     api("com.trello.rxlifecycle2:rxlifecycle:2.0.1")
     // If you want to bind to Android-specific lifecycles
@@ -83,7 +82,7 @@ dependencies {
 group = "com.fpliu"
 
 //这个是版本号，必须填写
-version = "1.0.0"
+version = android.defaultConfig.versionName ?: "1.0.0"
 
 val rootProjectName: String = rootProject.name
 
@@ -97,6 +96,6 @@ bintrayUploadExtension {
     bintrayUserName = "fpliu"
     bintrayOrganizationName = "fpliu"
     bintrayRepositoryName = "newton"
-    bintrayApiKey = "xxx"
+    bintrayApiKey = ""
 }
 

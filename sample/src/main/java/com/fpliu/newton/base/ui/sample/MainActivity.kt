@@ -102,7 +102,7 @@ class MainActivity : BaseActivity() {
 
         val fab = FloatingActionButton(this)
         fab.setOnClickListener {
-            showToast("${i++}...网路状况不佳，请切换Wi-Fi")
+            showToast("网路状况不佳，请切换Wi-Fi")
         }
         val lp2 = CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.MATCH_PARENT).apply {
             gravity = Gravity.BOTTOM or Gravity.RIGHT

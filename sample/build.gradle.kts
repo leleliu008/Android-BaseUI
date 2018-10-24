@@ -6,10 +6,9 @@ plugins {
 
 android {
     compileSdkVersion(26)
-    buildToolsVersion("26.0.2")
 
     defaultConfig {
-        minSdkVersion(14)
+        minSdkVersion(18)
         targetSdkVersion(25)
         applicationId = "com.fpliu.newton.base.ui.sample"
         versionCode = 1
@@ -45,7 +44,7 @@ dependencies {
     //api("com.fpliu:Android-emoji:1.0.0")
 
     //http://kotlinlang.org/docs/reference/using-gradle.html#configuring-dependencies
-    api("org.jetbrains.kotlin:kotlin-stdlib:1.2.21")
+    api("org.jetbrains.kotlin:kotlin-stdlib:1.2.50")
 
     api("com.android.support:support-annotations:26.1.0")
     api("com.android.support:appcompat-v7:26.1.0")

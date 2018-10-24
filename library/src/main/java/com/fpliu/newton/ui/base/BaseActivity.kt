@@ -222,15 +222,15 @@ abstract class BaseActivity : RxAppCompatActivity(), BaseView.NetworkChangeListe
         }
     }
 
-    protected fun afterTextChange(textView: TextView): Observable<String> {
-        return RxTextView.afterTextChangeEvents(textView).compose(bindUntilEvent(ActivityEvent.DESTROY)).map { event ->
-            event.editable()?.toString() ?: ""
+    fun afterTextChange(textView: TextView): Observable<String> {
+        return RxTextView.afterTextChangeEvents(textView).compose(bindUntilEvent(ActivityEvent.DESTROY)).map {
+            it.editable()?.toString() ?: ""
         }
     }
 
-    protected fun afterTextChange(textViewId: Int): Observable<String> {
-        return RxTextView.afterTextChangeEvents(findViewById(textViewId) as TextView).compose(bindUntilEvent(ActivityEvent.DESTROY)).map { event ->
-            event.editable()?.toString() ?: ""
+    fun afterTextChange2(@IdRes textViewId: Int): Observable<String> {
+        return RxTextView.afterTextChangeEvents(findViewById(textViewId) as TextView).compose(bindUntilEvent(ActivityEvent.DESTROY)).map {
+            it.editable()?.toString() ?: ""
         }
     }
 
@@ -238,7 +238,7 @@ abstract class BaseActivity : RxAppCompatActivity(), BaseView.NetworkChangeListe
         return RxTextView.editorActions(textView).compose(bindUntilEvent(ActivityEvent.DESTROY))
     }
 
-    protected fun editorActions(textViewId: Int): Observable<Int> {
+    protected fun editorActions(@IdRes textViewId: Int): Observable<Int> {
         return RxTextView.editorActions(findViewById(textViewId) as TextView).compose(bindUntilEvent(ActivityEvent.DESTROY))
     }
 
@@ -246,7 +246,7 @@ abstract class BaseActivity : RxAppCompatActivity(), BaseView.NetworkChangeListe
         return RxCompoundButton.checkedChanges(compoundButton).compose(bindUntilEvent(ActivityEvent.DESTROY))
     }
 
-    protected fun checkedChange(textViewId: Int): Observable<Boolean> {
+    protected fun checkedChange(@IdRes textViewId: Int): Observable<Boolean> {
         return RxCompoundButton.checkedChanges(findViewById(textViewId) as CompoundButton).compose(bindUntilEvent(ActivityEvent.DESTROY))
     }
 
@@ -254,7 +254,7 @@ abstract class BaseActivity : RxAppCompatActivity(), BaseView.NetworkChangeListe
         return RxCompoundButton.checked(compoundButton)
     }
 
-    protected fun checked(compoundButtonId: Int): Consumer<in Boolean> {
+    protected fun checked(@IdRes compoundButtonId: Int): Consumer<in Boolean> {
         return RxCompoundButton.checked(findViewById(compoundButtonId) as CompoundButton)
     }
 
@@ -262,7 +262,7 @@ abstract class BaseActivity : RxAppCompatActivity(), BaseView.NetworkChangeListe
         return RxTextView.hint(textView)
     }
 
-    protected fun hint(textViewId: Int): Consumer<in CharSequence> {
+    protected fun hint(@IdRes textViewId: Int): Consumer<in CharSequence> {
         return RxTextView.hint(findViewById(textViewId) as TextView)
     }
 
@@ -270,7 +270,7 @@ abstract class BaseActivity : RxAppCompatActivity(), BaseView.NetworkChangeListe
         return RxView.enabled(view)
     }
 
-    protected fun enabled(viewId: Int): Consumer<in Boolean> {
+    protected fun enabled(@IdRes viewId: Int): Consumer<in Boolean> {
         return RxView.enabled(findViewById(viewId))
     }
 }
