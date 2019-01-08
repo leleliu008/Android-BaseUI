@@ -29,13 +29,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion(27)
+    compileSdkVersion(28)
 
     defaultConfig {
         minSdkVersion(18)
-        targetSdkVersion(25)
-        versionCode = 1
-        versionName = "1.0.1"
+        targetSdkVersion(28)
+        versionCode = 2
+        versionName = "2.0.0"
     }
 
     sourceSets {
@@ -63,18 +63,23 @@ android {
 }
 
 dependencies {
-    api(fileTree(mapOf(Pair("dir", "src/main/libs"), Pair("include", "*.jar"))))
-
     //http://kotlinlang.org/docs/reference/using-gradle.html#configuring-dependencies
-    api("org.jetbrains.kotlin:kotlin-stdlib:1.2.50")
+    api(kotlin("stdlib", rootProject.extra["kotlinVersion"] as String))
 
-    api("com.android.support:design:27.1.1")
-    api("com.jakewharton.rxbinding2:rxbinding:2.0.0")
-    api("com.trello.rxlifecycle2:rxlifecycle:2.0.1")
-    // If you want to bind to Android-specific lifecycles
-    api("com.trello.rxlifecycle2:rxlifecycle-android:2.0.1")
-    // If you want pre-written Activities and Fragments you can subclass as     providers
-    api("com.trello.rxlifecycle2:rxlifecycle-components:2.0.1")
+    //https://github.com/JakeWharton/RxBinding
+    api("com.jakewharton.rxbinding3:rxbinding-core:3.0.0-alpha2")
+
+    //https://dl.google.com/dl/android/maven2/index.html
+    //https://developer.android.google.cn/reference/androidx/classes
+    api("androidx.appcompat:appcompat:1.0.2")
+    api("androidx.coordinatorlayout:coordinatorlayout:1.0.0")
+    api("com.google.android.material:material:1.0.0")
+
+    //https://github.com/uber/AutoDispose
+    api("com.uber.autodispose:autodispose-ktx:1.1.0")
+    api("com.uber.autodispose:autodispose-android-archcomponents:1.1.0")
+
+    //https://bintray.com/fpliu/newton
     api("com.fpliu:Android-Logger:1.0.0")
 }
 

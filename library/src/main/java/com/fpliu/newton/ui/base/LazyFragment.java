@@ -1,9 +1,10 @@
 package com.fpliu.newton.ui.base;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
 
 /**
  * <h1>懒加载Fragment</h1> 只有创建并显示的时候才会调用onCreateViewLazy方法<br>

@@ -2,12 +2,6 @@ package com.fpliu.newton.ui.base
 
 import android.content.ContentValues.TAG
 import android.content.Context
-import android.support.annotation.ColorInt
-import android.support.annotation.ColorRes
-import android.support.annotation.FloatRange
-import android.support.annotation.StringRes
-import android.support.design.widget.CoordinatorLayout
-import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.TypedValue
@@ -16,6 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
+import androidx.annotation.FloatRange
+import androidx.annotation.StringRes
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.content.ContextCompat
 import com.fpliu.newton.log.Logger
 import io.reactivex.Observable
 

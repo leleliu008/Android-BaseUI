@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    compileSdkVersion(26)
+    compileSdkVersion(28)
 
     defaultConfig {
         minSdkVersion(18)
-        targetSdkVersion(25)
+        targetSdkVersion(28)
         applicationId = "com.fpliu.newton.base.ui.sample"
         versionCode = 1
         versionName = "1.0.0"
@@ -41,13 +41,8 @@ android {
 
 dependencies {
     api(project(":library"))
-    //api("com.fpliu:Android-emoji:1.0.0")
+    //api("com.fpliu:Android-BaseUI:1.0.0")
 
     //http://kotlinlang.org/docs/reference/using-gradle.html#configuring-dependencies
-    api("org.jetbrains.kotlin:kotlin-stdlib:1.2.50")
-
-    api("com.android.support:support-annotations:26.1.0")
-    api("com.android.support:appcompat-v7:26.1.0")
-    api("com.android.support:design:26.1.0")
-    api("com.fpliu:Android-RecyclerViewHelper:1.0.0")
+    api(kotlin("stdlib", rootProject.extra["kotlinVersion"] as String))
 }

@@ -7,19 +7,19 @@ import android.content.IntentFilter
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.os.Build
-import android.support.annotation.ColorInt
-import android.support.annotation.LayoutRes
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.CoordinatorLayout
-import android.support.v4.view.ViewPager
-import android.support.v4.widget.DrawerLayout
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import androidx.annotation.ColorInt
+import androidx.annotation.LayoutRes
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.viewpager.widget.ViewPager
 import com.fpliu.newton.log.Logger
+import com.google.android.material.appbar.AppBarLayout
 
 /**
  * 视图基类

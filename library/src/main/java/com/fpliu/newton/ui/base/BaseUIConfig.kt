@@ -4,11 +4,11 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
-import android.support.annotation.ColorInt
-import android.support.annotation.FloatRange
 import android.view.Gravity
 import android.widget.Button
 import android.widget.RelativeLayout
+import androidx.annotation.ColorInt
+import androidx.annotation.FloatRange
 
 /**
  * 全局配置
