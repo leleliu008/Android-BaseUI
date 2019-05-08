@@ -23,7 +23,9 @@ class MainActivity : BaseActivity() {
         //统一设置标题栏高度
         val headHeight = UIUtil.dp2px(this, 48)
         BaseUIConfig.headHeight = headHeight
-
+        BaseUIConfig.toastLayoutLayoutParams.apply {
+            topMargin = UIUtil.getStatusBarHeight(this@MainActivity)
+        }
 
         super.onCreate(savedInstanceState)
         title = "BaseUI使用示例"
@@ -86,7 +88,6 @@ class MainActivity : BaseActivity() {
     override fun getToastLayoutParams(): FrameLayout.LayoutParams {
         return super.getToastLayoutParams().apply {
 //            topMargin = UIUtil.getStatusBarHeight(this@MainActivity)
-            topMargin = 0
         }
     }
 }

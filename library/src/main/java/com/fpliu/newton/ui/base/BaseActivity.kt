@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup.LayoutParams
 import android.view.Window
-import android.widget.FrameLayout
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
 import androidx.annotation.LayoutRes
@@ -131,5 +130,5 @@ abstract class BaseActivity : AppCompatActivity(), BaseView.NetworkChangeListene
 
     fun disposeOnDestroy() = AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY)
 
-    open fun getToastLayoutParams() = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, BaseUIConfig.headHeight)
+    open fun getToastLayoutParams() = BaseUIConfig.toastLayoutLayoutParams
 }

@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.view.Gravity
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.RelativeLayout
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
@@ -29,12 +30,6 @@ object BaseUIConfig {
     var headBg: Drawable = ColorDrawable(Color.parseColor("#00aff0"))
 
     /**
-     * toastLayout背景颜色
-     */
-    @ColorInt
-    var toastLayoutBgColor: Int = Color.parseColor("#00ddbb")
-
-    /**
      * 标题栏的高度，单位：px
      */
     var headHeight = 60
@@ -52,6 +47,17 @@ object BaseUIConfig {
     //appBarLayout的阴影
     @FloatRange(from = 0.0)
     var appBarLayoutElevation: Float = 0f
+
+    /**
+     * toastLayout背景颜色
+     */
+    @ColorInt
+    var toastLayoutBgColor: Int = Color.parseColor("#00ddbb")
+
+    /**
+     * toastLayout的布局参数
+     */
+    var toastLayoutLayoutParams: FrameLayout.LayoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, headHeight)
 
     /**
      * 字体文件，存放在assets目录中

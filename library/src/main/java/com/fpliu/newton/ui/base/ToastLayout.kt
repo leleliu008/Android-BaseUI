@@ -25,7 +25,11 @@ import java.util.concurrent.atomic.AtomicReference
 /**
  * 顶部类toast弹出层
  */
-class ToastLayout @JvmOverloads constructor(context: Context, attributeSet: AttributeSet? = null, defStyleAttr: Int = 0) : TextView(context, attributeSet, defStyleAttr) {
+class ToastLayout @JvmOverloads constructor(
+    context: Context,
+    attributeSet: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : TextView(context, attributeSet, defStyleAttr) {
 
     private enum class State {
         IDLE,          //空闲状态
