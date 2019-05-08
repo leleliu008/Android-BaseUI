@@ -8,12 +8,12 @@ import android.graphics.Color
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
+import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.animation.BounceInterpolator
 import android.widget.TextView
 import androidx.annotation.IntRange
 import androidx.annotation.StringRes
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -57,7 +57,7 @@ class ToastLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
         viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 viewTreeObserver.removeOnGlobalLayoutListener(this)
-                val topMargin = (layoutParams as? CoordinatorLayout.LayoutParams)?.topMargin?.toFloat()
+                val topMargin = (layoutParams as? ViewGroup.MarginLayoutParams)?.topMargin?.toFloat()
                     ?: 0f
                 translation = measuredHeight.toFloat() + topMargin
                 translationY = -translation

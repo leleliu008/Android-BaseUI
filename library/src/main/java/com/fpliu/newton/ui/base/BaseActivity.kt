@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup.LayoutParams
 import android.view.Window
+import android.widget.FrameLayout
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
 import androidx.annotation.LayoutRes
@@ -24,11 +25,13 @@ import com.uber.autodispose.autoDisposable
  */
 abstract class BaseActivity : AppCompatActivity(), BaseView.NetworkChangeListener {
 
-    protected val contentView: BaseView by lazy { BaseView(this) }
+    val contentView: BaseView by lazy { BaseView(this) }
+
+    //提示信息弹出层
+    lateinit var toastLayout: ToastLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
         window.run {
             //设置颜色编码格式，否则有些手机会出现颜色阶梯
@@ -46,14 +49,15 @@ abstract class BaseActivity : AppCompatActivity(), BaseView.NetworkChangeListene
         }
 
         contentView.setNetworkChangeListener(this)
-        contentView.headBarLayout.run {
+        contentView.headBarLayout.apply {
             setLeftViewStrategy(BaseUIConfig.leftBtn)
-            getLeftBtnClickObservable()
-                .autoDisposable(AndroidLifecycleScopeProvider.from(this@BaseActivity, Lifecycle.Event.ON_DESTROY))
-                .subscribe { onLeftBtnClick() }
+            getLeftBtnClickObservable().autoDisposable(disposeOnDestroy()).subscribe { onLeftBtnClick() }
         }
 
         super.setContentView(contentView)
+
+        toastLayout = ToastLayout(this)
+        super.addContentView(toastLayout, getToastLayoutParams())
     }
 
     open fun onLeftBtnClick() {
@@ -110,18 +114,22 @@ abstract class BaseActivity : AppCompatActivity(), BaseView.NetworkChangeListene
     }
 
     fun showToast(text: String, @IntRange(from = 0) remainTime: Long = 3) {
-        contentView.showToast(text, remainTime)
+        toastLayout.show(text, remainTime)
     }
 
     fun showToast(text: String) {
-        contentView.showToast(text, 3)
+        toastLayout.show(text, 3)
     }
 
     fun showToastDontDismiss(text: String) {
-        contentView.showToastDontDismiss(text)
+        toastLayout.show(text, 0)
     }
 
     fun dismissToast() {
-        contentView.dismissToast()
+        toastLayout.dismiss()
     }
+
+    fun disposeOnDestroy() = AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY)
+
+    open fun getToastLayoutParams() = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, BaseUIConfig.headHeight)
 }

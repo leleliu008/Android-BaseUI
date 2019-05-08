@@ -19,7 +19,11 @@ import androidx.core.content.ContextCompat
 import com.fpliu.newton.log.Logger
 import io.reactivex.Observable
 
-class HeadBarLayout @JvmOverloads constructor(context: Context, attributeSet: AttributeSet? = null, defStyleAttr: Int = 0) : RelativeLayout(context, attributeSet, defStyleAttr) {
+class HeadBarLayout @JvmOverloads constructor(
+    context: Context,
+    attributeSet: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : RelativeLayout(context, attributeSet, defStyleAttr) {
 
     /**
      * 标题栏文本

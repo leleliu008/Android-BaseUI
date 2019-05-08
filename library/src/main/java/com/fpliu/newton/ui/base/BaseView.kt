@@ -26,7 +26,11 @@ import com.google.android.material.appbar.AppBarLayout
  *
  * @author 792793182@qq.com 2015-09-18.
  */
-class BaseView @JvmOverloads constructor(context: Context, attributeSet: AttributeSet? = null, defStyleAttr: Int = 0) : CoordinatorLayout(context, attributeSet, defStyleAttr) {
+class BaseView @JvmOverloads constructor(
+    context: Context,
+    attributeSet: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : CoordinatorLayout(context, attributeSet, defStyleAttr) {
 
     companion object {
         private val TAG = BaseView::class.java.simpleName
@@ -34,11 +38,13 @@ class BaseView @JvmOverloads constructor(context: Context, attributeSet: Attribu
 
     var appBarLayout: AppBarLayout
 
-    //提示信息弹出层
-    var toastLayout: ToastLayout
+    var statusBarPlaceHolder: View
 
     //标题栏
     var headBarLayout: HeadBarLayout
+
+    //标题栏与Body的分割线
+    var separatorView: View
 
     private var networkChangeListener: NetworkChangeListener? = null
 
@@ -60,15 +66,24 @@ class BaseView @JvmOverloads constructor(context: Context, attributeSet: Attribu
             //对于AppBarLayout来说，使用appBarLayout.elevation是不起作用的
             appBarLayout.targetElevation = BaseUIConfig.appBarLayoutElevation
         }
-        super.addView(appBarLayout, CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT))
+        super.addView(appBarLayout, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT))
+
+        statusBarPlaceHolder = View(context)
+        statusBarPlaceHolder.visibility = View.GONE
+        AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, UIUtil.getStatusBarHeight(context)).apply {
+            scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP
+        }.let { appBarLayout.addView(statusBarPlaceHolder, it) }
 
         headBarLayout = HeadBarLayout(context)
         AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, BaseUIConfig.headHeight).apply {
             scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP
         }.let { appBarLayout.addView(headBarLayout, it) }
 
-        toastLayout = ToastLayout(context)
-        super.addView(toastLayout, CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.MATCH_PARENT, BaseUIConfig.headHeight))
+        separatorView = View(context)
+        separatorView.visibility = View.GONE
+        AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, 10).apply {
+            scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP
+        }.let { appBarLayout.addView(separatorView, it) }
     }
 
     override fun addView(view: View, lp: ViewGroup.LayoutParams) {
@@ -91,14 +106,7 @@ class BaseView @JvmOverloads constructor(context: Context, attributeSet: Attribu
                     }
                 }
             }
-
-        //确保toastLayout在最上层
-        removeView(toastLayout)
         super.addView(view, lp2)
-
-        val lp3 = toastLayout.layoutParams
-            ?: CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.MATCH_PARENT, BaseUIConfig.headHeight)
-        super.addView(toastLayout, lp3)
     }
 
     override fun addView(view: View) {
@@ -133,7 +141,7 @@ class BaseView @JvmOverloads constructor(context: Context, attributeSet: Attribu
     }
 
     fun setHeadView(view: View) {
-        appBarLayout.removeAllViews()
+        appBarLayout.removeView(headBarLayout)
         AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, BaseUIConfig.headHeight).apply {
             scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP
         }.let { appBarLayout.addView(view, it) }
@@ -153,22 +161,6 @@ class BaseView @JvmOverloads constructor(context: Context, attributeSet: Attribu
 
     fun setHeadBackgroundDrawable(drawable: Drawable) {
         headBarLayout.setBackgroundDrawable(drawable)
-    }
-
-    fun showToast(text: String, remainTime: Long = 3) {
-        toastLayout.show(text, remainTime)
-    }
-
-    fun showToast(text: String) {
-        toastLayout.show(text)
-    }
-
-    fun showToastDontDismiss(text: String) {
-        toastLayout.show(text, 0)
-    }
-
-    fun dismissToast() {
-        toastLayout.dismiss()
     }
 
     override fun onAttachedToWindow() {

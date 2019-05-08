@@ -1,4 +1,5 @@
 import com.fpliu.gradle.bintrayUploadExtension
+import java.util.Properties
 
 buildscript {
     repositories {
@@ -35,7 +36,7 @@ android {
         minSdkVersion(18)
         targetSdkVersion(28)
         versionCode = 2
-        versionName = "2.0.0"
+        versionName = "2.0.4"
     }
 
     sourceSets {
@@ -90,6 +91,7 @@ group = "com.fpliu"
 version = android.defaultConfig.versionName ?: "1.0.0"
 
 val rootProjectName: String = rootProject.name
+val properties = Properties().apply { load(rootProject.file("local.properties").inputStream()) }
 
 bintrayUploadExtension {
     developerName = "leleliu008"
@@ -101,6 +103,6 @@ bintrayUploadExtension {
     bintrayUserName = "fpliu"
     bintrayOrganizationName = "fpliu"
     bintrayRepositoryName = "newton"
-    bintrayApiKey = ""
+    bintrayApiKey = properties.getProperty("bintray.apikey")
 }
 

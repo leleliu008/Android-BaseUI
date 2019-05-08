@@ -141,6 +141,16 @@ public final class UIUtil {
         return statusBarHeight;
     }
 
+    public static int getStatusBarHeight(Context context) {
+        int result = 0;
+        Resources resources = context.getResources();
+        int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = resources.getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
     /**
      * 显示或者隐藏状态栏
      *

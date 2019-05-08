@@ -2,6 +2,7 @@ package com.fpliu.newton.base.ui.sample
 
 import android.os.Bundle
 import android.view.Gravity
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -43,7 +44,7 @@ class MainActivity : BaseActivity() {
         ImageView(this).run {
             scaleType = ImageView.ScaleType.FIT_XY
             setImageResource(R.drawable.notify_panel_notification_icon_bg)
-            container.addView(this, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 200))
+            container.addView(this, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 2000))
             setOnClickListener {
                 dismissToast()
             }
@@ -70,11 +71,6 @@ class MainActivity : BaseActivity() {
 //            }
         var i = 0
 
-        (contentView.toastLayout.layoutParams as CoordinatorLayout.LayoutParams).run {
-            topMargin = UIUtil.getStatusBarHeight(window)
-            contentView.toastLayout.layoutParams = this
-        }
-
         val fab = FloatingActionButton(this)
         fab.setOnClickListener {
             showToast("网路状况不佳，请切换Wi-Fi")
@@ -85,5 +81,12 @@ class MainActivity : BaseActivity() {
             rightMargin = 30
         }
         addContentView(fab, lp2)
+    }
+
+    override fun getToastLayoutParams(): FrameLayout.LayoutParams {
+        return super.getToastLayoutParams().apply {
+//            topMargin = UIUtil.getStatusBarHeight(this@MainActivity)
+            topMargin = 0
+        }
     }
 }

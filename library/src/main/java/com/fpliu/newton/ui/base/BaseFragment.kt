@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
 import androidx.annotation.LayoutRes
@@ -35,7 +36,7 @@ abstract class BaseFragment : Fragment(), BaseView.NetworkChangeListener {
             headBarLayout.apply {
                 setLeftViewStrategy(BaseUIConfig.leftBtn)
                 getLeftBtnClickObservable()
-                    .autoDisposable(AndroidLifecycleScopeProvider.from(this@BaseFragment, Lifecycle.Event.ON_DESTROY))
+                    .autoDisposable(disposeOnDestroy())
                     .subscribe { onLeftBtnClick() }
             }
         }
@@ -79,18 +80,29 @@ abstract class BaseFragment : Fragment(), BaseView.NetworkChangeListener {
     }
 
     fun showToast(text: String, @IntRange(from = 0) remainTime: Long = 3) {
-        contentView.showToast(text, remainTime)
+        val activity = activity ?: return
+        if (activity is BaseActivity) {
+            activity.showToast(text, remainTime)
+        } else {
+            UIUtil.makeToast(activity, text, Toast.LENGTH_LONG).show()
+        }
     }
 
     fun showToast(text: String) {
-        contentView.showToast(text, 3)
+        showToast(text, 3)
     }
 
     fun showToastDontDismiss(text: String) {
-        contentView.showToastDontDismiss(text)
+        showToast(text, 0)
     }
 
     fun dismissToast() {
-        contentView.dismissToast()
+        val activity = activity ?: return
+        if (activity is BaseActivity) {
+            activity.dismissToast()
+        }
     }
+
+    fun disposeOnDestroy() = AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY)
+
 }
