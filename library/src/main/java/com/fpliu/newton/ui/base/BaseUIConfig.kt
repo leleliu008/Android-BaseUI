@@ -35,6 +35,13 @@ object BaseUIConfig {
     var headHeight = 60
 
     /**
+     * separatorView的背景
+     */
+    var separatorBg: Drawable? = null
+
+    var separatorHeight: Int = 0
+
+    /**
      *  标题栏两边的边距，单位：px
      */
     var titlePaddingLeftRight = 60

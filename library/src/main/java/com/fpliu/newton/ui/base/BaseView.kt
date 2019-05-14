@@ -80,8 +80,10 @@ class BaseView @JvmOverloads constructor(
         }.let { appBarLayout.addView(headBarLayout, it) }
 
         separatorView = View(context)
-        separatorView.visibility = View.GONE
-        AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, 10).apply {
+        if (BaseUIConfig.separatorBg != null) {
+            separatorView.background = BaseUIConfig.separatorBg
+        }
+        AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, BaseUIConfig.separatorHeight).apply {
             scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP
         }.let { appBarLayout.addView(separatorView, it) }
     }
