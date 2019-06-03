@@ -1,12 +1,9 @@
 package com.fpliu.newton.ui.base
 
-import android.graphics.Color
 import android.graphics.PixelFormat
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup.LayoutParams
-import android.view.Window
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
 import androidx.annotation.LayoutRes
@@ -22,7 +19,7 @@ import com.uber.autodispose.autoDisposable
  *
  * @author 792793182@qq.com 2015-06-11
  */
-abstract class BaseActivity : AppCompatActivity(), BaseView.NetworkChangeListener {
+abstract class BaseActivity : AppCompatActivity() {
 
     val contentView: BaseView by lazy { BaseView(this) }
 
@@ -32,22 +29,9 @@ abstract class BaseActivity : AppCompatActivity(), BaseView.NetworkChangeListene
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        window.run {
-            //设置颜色编码格式，否则有些手机会出现颜色阶梯
-            setFormat(PixelFormat.RGBA_8888)
+        //设置颜色编码格式，否则有些手机会出现颜色阶梯
+        window.setFormat(PixelFormat.RGBA_8888)
 
-            //设置背景颜色
-            setBackgroundDrawable(ColorDrawable(Color.WHITE))
-        }
-
-        try {
-            //去掉默认是标题，自己定义标题栏
-            requestWindowFeature(Window.FEATURE_NO_TITLE)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        contentView.setNetworkChangeListener(this)
         contentView.headBarLayout.apply {
             setLeftViewStrategy(BaseUIConfig.leftBtn)
             getLeftBtnClickObservable().autoDisposable(disposeOnDestroy()).subscribe { onLeftBtnClick() }
@@ -61,15 +45,6 @@ abstract class BaseActivity : AppCompatActivity(), BaseView.NetworkChangeListene
 
     open fun onLeftBtnClick() {
         finish()
-    }
-
-    /**
-     * 网络变化的回调
-     *
-     * @param isNetworkAvailable 网络是否可用
-     */
-    override fun onNetworkChange(isNetworkAvailable: Boolean) {
-
     }
 
     override fun setContentView(@LayoutRes layoutResId: Int) {

@@ -21,7 +21,7 @@ import com.uber.autodispose.autoDisposable
  *
  * @author 792793182@qq.com 2015-06-11
  */
-abstract class BaseFragment : Fragment(), BaseView.NetworkChangeListener {
+abstract class BaseFragment : Fragment() {
 
     protected lateinit var contentView: BaseView
 
@@ -32,7 +32,6 @@ abstract class BaseFragment : Fragment(), BaseView.NetworkChangeListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): BaseView? {
         return contentView.apply {
-            setNetworkChangeListener(this@BaseFragment)
             headBarLayout.apply {
                 setLeftViewStrategy(BaseUIConfig.leftBtn)
                 getLeftBtnClickObservable()
@@ -44,15 +43,6 @@ abstract class BaseFragment : Fragment(), BaseView.NetworkChangeListener {
 
     open fun onLeftBtnClick() {
         activity?.onBackPressed()
-    }
-
-    /**
-     * 网络变化的回调
-     *
-     * @param isNetworkAvailable 网络是否可用
-     */
-    override fun onNetworkChange(isNetworkAvailable: Boolean) {
-
     }
 
     fun addContentView(@LayoutRes layoutId: Int): View {

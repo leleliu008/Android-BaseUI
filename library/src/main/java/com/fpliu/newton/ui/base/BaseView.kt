@@ -1,11 +1,7 @@
 package com.fpliu.newton.ui.base
 
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.graphics.drawable.Drawable
-import android.net.ConnectivityManager
 import android.os.Build
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -14,11 +10,11 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.ColorInt
+import androidx.annotation.DrawableRes
 import androidx.annotation.LayoutRes
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager.widget.ViewPager
-import com.fpliu.newton.log.Logger
 import com.google.android.material.appbar.AppBarLayout
 
 /**
@@ -32,10 +28,6 @@ class BaseView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : CoordinatorLayout(context, attributeSet, defStyleAttr) {
 
-    companion object {
-        private val TAG = BaseView::class.java.simpleName
-    }
-
     var appBarLayout: AppBarLayout
 
     var statusBarPlaceHolder: View
@@ -45,17 +37,6 @@ class BaseView @JvmOverloads constructor(
 
     //标题栏与Body的分割线
     var separatorView: View
-
-    private var networkChangeListener: NetworkChangeListener? = null
-
-    private var receiver: BroadcastReceiver? = object : BroadcastReceiver() {
-
-        override fun onReceive(context: Context, intent: Intent) {
-            if (ConnectivityManager.CONNECTIVITY_ACTION == intent.action) {
-                networkChangeListener?.onNetworkChange(UIUtil.isNetworkAvailable(context))
-            }
-        }
-    }
 
     init {
         id = R.id.base_view
@@ -157,47 +138,11 @@ class BaseView @JvmOverloads constructor(
         headBarLayout.setBackgroundColor(color)
     }
 
-    fun setHeadBackgroundResource(resId: Int) {
+    fun setHeadBackgroundResource(@DrawableRes resId: Int) {
         headBarLayout.setBackgroundResource(resId)
     }
 
     fun setHeadBackgroundDrawable(drawable: Drawable) {
         headBarLayout.setBackgroundDrawable(drawable)
-    }
-
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-
-        //注册网络变化的监听器
-        IntentFilter().apply {
-            addAction(ConnectivityManager.CONNECTIVITY_ACTION)
-        }.let {
-            context.registerReceiver(receiver, it)
-        }
-    }
-
-    override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
-
-        try {
-            context.unregisterReceiver(receiver)
-        } catch (e: Exception) {
-            Logger.e(TAG, "onDetachedFromWindow()", e)
-        }
-
-        receiver = null
-    }
-
-    interface NetworkChangeListener {
-        /**
-         * 网络变化的回调
-         *
-         * @param isNetworkAvailable 网络是否可用
-         */
-        fun onNetworkChange(isNetworkAvailable: Boolean)
-    }
-
-    fun setNetworkChangeListener(networkChangeListener: NetworkChangeListener) {
-        this.networkChangeListener = networkChangeListener
     }
 }

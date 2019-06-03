@@ -1,5 +1,7 @@
 package com.fpliu.newton.base.ui.sample
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Gravity
 import android.widget.FrameLayout
@@ -25,6 +27,10 @@ class MainActivity : BaseActivity() {
         BaseUIConfig.headHeight = headHeight
         BaseUIConfig.toastLayoutLayoutParams.apply {
             topMargin = UIUtil.getStatusBarHeight(this@MainActivity)
+        }
+        BaseUIConfig.separatorHeight = 40
+        BaseUIConfig.separatorBg = ColorDrawable(Color.GRAY).apply {
+            setBounds(0, 0, UIUtil.getScreenWidth(this@MainActivity), 40)
         }
 
         super.onCreate(savedInstanceState)
