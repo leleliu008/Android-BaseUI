@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.fpliu.newton.base.ui.sample">
+    package="com.fpliu.newton.ui.base.sample">
 
     <application
-        android:label="BaseUITest"
-        android:theme="@style/Theme.AppCompat.NoActionBar"
-        tools:replace="android:label">
+        android:allowBackup="true"
+        android:name=".MyApp"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait">
@@ -14,7 +14,10 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
-        <activity android:name=".BActivity" />
     </application>
 </manifest>

@@ -1,25 +1,26 @@
 buildscript {
-    val kotlinVersion = "1.3.11"
+    val kotlinVersion = "1.3.50"
     extra["kotlinVersion"] = kotlinVersion
          
     repositories {
-        jcenter()
+        jcenter { url = uri("https://maven.aliyun.com/repository/jcenter") }
         google()
     }
+
     dependencies {
         //用于构建Android工程的插件
-        //https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration.html
-        classpath("com.android.tools.build:gradle:3.2.1")
+        //https://developer.android.com/studio/releases/gradle-plugin
+        classpath("com.android.tools.build:gradle:3.3.2")
 
         //Kotlin编译的插件
         //http://kotlinlang.org/docs/reference/using-gradle.html
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+        classpath(kotlin("gradle-plugin", kotlinVersion))
     }
 }
 
 allprojects {
     repositories {
-        jcenter()
+        jcenter { url = uri("https://maven.aliyun.com/repository/jcenter") }
         google()
     }
 }

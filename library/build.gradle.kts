@@ -1,25 +1,11 @@
-import com.fpliu.gradle.bintrayUploadExtension
-import java.util.Properties
-
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        //对android-maven-gradle-plugin和gradle-bintray-plugin两个插件的包装、简化插件
-        //https://github.com/leleliu008/BintrayUploadAndroidGradlePlugin
-        classpath("com.fpliu:BintrayUploadGradlePlugin:1.0.0")
-    }
-}
-
-apply {
-    plugin("com.fpliu.bintray")
-}
-
 plugins {
     id("com.android.library")
     kotlin("android")
-
+    
+    //https://github.com/leleliu008/BintrayUploadGradlePlugin
+    //https://plugins.gradle.org/plugin/com.fpliu.bintray
+    id("com.fpliu.bintray").version("1.0.7")
+    
     //用于构建aar和maven包
     //https://github.com/dcendents/android-maven-gradle-plugin
     id("com.github.dcendents.android-maven").version("2.0")
@@ -36,13 +22,13 @@ android {
         minSdkVersion(18)
         targetSdkVersion(28)
         versionCode = 2
-        versionName = "2.0.7"
+        versionName = "2.0.12"
     }
 
     sourceSets {
         getByName("main") {
             jniLibs.srcDir("src/main/libs")
-            aidl.srcDirs("src/main/java")
+            java.srcDirs("src/main/kotlin")
         }
     }
 
@@ -58,8 +44,8 @@ android {
 
     compileOptions {
         //使用JAVA8语法解析
-        setSourceCompatibility(JavaVersion.VERSION_1_8)
-        setTargetCompatibility(JavaVersion.VERSION_1_8)
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
 
@@ -72,7 +58,6 @@ dependencies {
 
     //https://dl.google.com/dl/android/maven2/index.html
     //https://developer.android.google.cn/reference/androidx/classes
-    api("androidx.appcompat:appcompat:1.0.2")
     api("androidx.coordinatorlayout:coordinatorlayout:1.0.0")
     api("com.google.android.material:material:1.0.0")
 
@@ -81,6 +66,7 @@ dependencies {
     api("com.uber.autodispose:autodispose-android-archcomponents:1.1.0")
 
     //https://bintray.com/fpliu/newton
+    api("com.fpliu:kotlin-ext-android:1.0.3")
     api("com.fpliu:Android-Logger:1.0.0")
 }
 
@@ -91,7 +77,6 @@ group = "com.fpliu"
 version = android.defaultConfig.versionName ?: "1.0.0"
 
 val rootProjectName: String = rootProject.name
-val properties = Properties().apply { load(rootProject.file("local.properties").inputStream()) }
 
 bintrayUploadExtension {
     developerName = "leleliu008"
@@ -100,9 +85,6 @@ bintrayUploadExtension {
     projectSiteUrl = "https://github.com/$developerName/$rootProjectName"
     projectGitUrl = "https://github.com/$developerName/$rootProjectName"
 
-    bintrayUserName = "fpliu"
     bintrayOrganizationName = "fpliu"
     bintrayRepositoryName = "newton"
-    bintrayApiKey = properties.getProperty("bintray.apikey")
 }
-
