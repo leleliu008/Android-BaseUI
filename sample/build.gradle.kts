@@ -41,10 +41,11 @@ android {
 
 dependencies {
     api(project(":library"))
-    //api("com.fpliu:Android-BaseUI:2.0.11")
+    //api("com.fpliu:Android-BaseUI:2.0.12")
     
     api("com.fpliu:Android-CustomDimen:1.0.0")
-    api("com.fpliu:Android-StatusBar-Util:1.0.1")
+    api("com.fpliu:Android-StatusBar-Util:1.0.2")
+    api("com.fpliu:Android-Font-Config-api:1.0.0")
     api("com.fpliu:Android-Font-Assets-Alibaba_PuHuiTi_Light:1.0.0")
 
     //https://github.com/airbnb/lottie-android

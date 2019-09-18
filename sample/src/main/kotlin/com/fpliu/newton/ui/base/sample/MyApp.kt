@@ -14,6 +14,7 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import com.fpliu.newton.font.config.api.applyFont
 import com.fpliu.newton.log.Logger
 import com.fpliu.newton.ui.base.BaseActivity
 import com.fpliu.newton.ui.statusbar.StatusBarUtil
@@ -32,7 +33,7 @@ class MyApp : Application(), Application.ActivityLifecycleCallbacks {
         registerActivityLifecycleCallbacks(this)
 
         //全局替换字体，使用阿里巴巴普惠体
-        globalReplaceFont("Alibaba_PuHuiTi_Light.otf")
+        applyFont("Alibaba_PuHuiTi_Light.otf")
     }
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
