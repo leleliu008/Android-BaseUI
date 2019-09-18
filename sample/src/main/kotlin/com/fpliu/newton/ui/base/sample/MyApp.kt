@@ -32,8 +32,8 @@ class MyApp : Application(), Application.ActivityLifecycleCallbacks {
         super.onCreate()
         registerActivityLifecycleCallbacks(this)
 
-        //全局替换字体，使用阿里巴巴普惠体
-        applyFont("Alibaba_PuHuiTi_Light.otf")
+        //应用阿里巴巴普惠体
+        applyFont("assets:Alibaba_PuHuiTi_Light.otf")
     }
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
