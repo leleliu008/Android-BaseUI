@@ -4,7 +4,7 @@ plugins {
     
     //https://github.com/leleliu008/BintrayUploadGradlePlugin
     //https://plugins.gradle.org/plugin/com.fpliu.bintray
-    id("com.fpliu.bintray").version("1.0.8")
+    id("com.fpliu.bintray").version("1.0.13")
     
     //用于构建aar和maven包
     //https://github.com/dcendents/android-maven-gradle-plugin
@@ -66,7 +66,7 @@ dependencies {
     api("com.uber.autodispose:autodispose-android-archcomponents:1.1.0")
 
     //https://bintray.com/fpliu/newton
-    api("com.fpliu:kotlin-ext-android:1.0.3")
+    api("com.fpliu:kotlin-ext-android:1.0.4")
     api("com.fpliu:Android-Logger:1.0.0")
 }
 
